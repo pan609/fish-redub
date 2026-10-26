@@ -1,7 +1,7 @@
 import { useNetworkState } from 'expo-network';
 import { router, Stack, useFocusEffect } from 'expo-router';
-import { useCallback, useRef } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, View, type ScrollViewInstance } from 'react-native';
+import { useCallback, useEffect, useRef } from 'react';
+import { Keyboard, Platform, Pressable, ScrollView, StyleSheet, View, type ScrollViewInstance } from 'react-native';
 
 import { env } from '@/config/env';
 import { StepAudio } from '@/features/redub/components/StepAudio';
@@ -37,6 +37,20 @@ export default function RedubScreen() {
   const current = useCurrentStep();
   const scrollRef = useRef<ScrollViewInstance>(null);
   const textY = useRef(0);
+  const editing = useRef(false);
+
+  // 键盘完全弹出后再滚动：让第 ② 步顶到可视区顶部，输入框与"确认文字"都在键盘上方（DESIGN §5.9）
+  useEffect(() => {
+    const show = Keyboard.addListener('keyboardDidShow', () => {
+      // iOS 透明导航栏覆盖内容顶部约 100pt，需要让出这段距离
+      if (editing.current) scrollRef.current?.scrollTo({ y: Math.max(0, textY.current - (Platform.OS === 'ios' ? 100 : 8)), animated: true });
+    });
+    const hide = Keyboard.addListener('keyboardDidHide', () => (editing.current = false));
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
 
   // PRD A3：离开页面时暂停播放
   useFocusEffect(useCallback(() => () => audioCoordinator.stopAll(), []));
@@ -66,7 +80,7 @@ export default function RedubScreen() {
       <Stepper current={current} />
       <StepAudio />
       <View onLayout={(e) => (textY.current = e.nativeEvent.layout.y)}>
-        <StepText onInputFocus={() => setTimeout(() => scrollRef.current?.scrollTo({ y: Math.max(0, textY.current - 12), animated: true }), 250)} />
+        <StepText onInputFocus={() => (editing.current = true)} />
       </View>
       <StepVoice />
       <StepDub />

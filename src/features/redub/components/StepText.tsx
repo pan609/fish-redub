@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Animated, StyleSheet, TextInput, View } from 'react-native';
+import { Animated, Keyboard, StyleSheet, TextInput, View } from 'react-native';
 
 import { TEXT_LIMIT } from '@/copy/strings';
 import { LANGUAGE_LABEL } from '@/config/voices';
@@ -152,6 +152,9 @@ function Editor(props: {
           onChangeText={props.onChange}
           editable={!props.disabled}
           multiline
+          // 回车即"完成"并收起键盘：配音文字不需要换行，也避免键盘挡住确认按钮
+          returnKeyType="done"
+          submitBehavior="blurAndSubmit"
           placeholder="请输入要配音的文字"
           placeholderTextColor={colors.textTertiary}
           onFocus={() => {
@@ -176,7 +179,15 @@ function Editor(props: {
           文字超过 {TEXT_LIMIT} 字，请删减后再确认
         </AppText>
       ) : null}
-      <Button label="确认文字" onPress={props.onConfirm} disabled={!!problem || props.disabled} testID="step.text.confirm" />
+      <Button
+        label="确认文字"
+        onPress={() => {
+          Keyboard.dismiss();
+          props.onConfirm();
+        }}
+        disabled={!!problem || props.disabled}
+        testID="step.text.confirm"
+      />
     </>
   );
 }

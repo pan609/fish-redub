@@ -52,3 +52,6 @@ design/reference/
 
 # 超大测试文件由 scripts/gen-test-assets.sh 生成
 test-assets/too-large.wav
+
+# Maestro 运行产物
+artifacts/

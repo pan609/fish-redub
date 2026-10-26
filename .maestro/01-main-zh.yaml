@@ -1,0 +1,64 @@
+# TC-IMP-01 / TC-TXT-01 / TC-TXT-05 / TC-GEN-01 / TC-GEN-03 / TC-EXP-01 / TC-HIS-01 / TC-HIS-03
+# 中文主流程：导入 MP3 → 转写 → 编辑并确认 → 默认中文声音 → 生成 → 试听 → 历史详情对照
+appId: com.pany05.redub
+name: 01 中文主流程
+---
+- runFlow: common/launch.yaml
+- runFlow:
+    file: common/import-file.yaml
+    env:
+      FILE_IOS: zh-short
+      FILE_ANDROID: zh-short.mp3
+# 转写结果进入编辑态
+- extendedWaitUntil:
+    visible:
+      id: step.text.input
+    timeout: 30000
+- assertVisible: ".*分享一个关于声音的小故事.*"
+- assertVisible: "中文"
+# 编辑文字，出现"恢复原文"
+- tapOn:
+    id: step.text.input
+- inputText: "谢谢收听"
+- assertVisible:
+    id: step.text.restore
+# 回车即完成并收起键盘
+- pressKey: Enter
+- tapOn:
+    id: step.text.confirm
+# 中文语料默认选择中文声音
+- assertVisible:
+    id: step.voice.name
+    text: "温柔女声"
+- scrollUntilVisible:
+    element:
+      id: step.dub.generate
+- tapOn:
+    id: step.dub.generate
+- extendedWaitUntil:
+    visible:
+      id: result.card
+    timeout: 60000
+- scrollUntilVisible:
+    element:
+      id: result.share
+- assertVisible: "已保存到历史"
+- assertVisible: ".*谢谢收听.*"
+# 播放新配音
+- tapOn:
+    id: result.play.dub
+- assertVisible: "暂停新配音"
+- tapOn:
+    id: result.play.dub
+- takeScreenshot: 01-result
+# 历史详情：原始转写与配音文字对照
+- tapOn: "历史"
+- tapOn:
+    id: history.item.0
+- assertVisible:
+    id: history.detail.final
+    text: ".*谢谢收听.*"
+- assertVisible: "已编辑"
+- assertVisible:
+    id: history.detail.transcript
+- takeScreenshot: 01-history-detail

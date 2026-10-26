@@ -1,0 +1,3 @@
+# Maestro 工作区配置：flows 在 .maestro/ 下，common/ 为子流程
+flows:
+  - "*.yaml"

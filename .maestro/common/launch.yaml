@@ -1,0 +1,11 @@
+# 冷启动并清空数据（历史记录、工作目录），授予麦克风权限
+appId: com.pany05.redub
+---
+- launchApp:
+    clearState: true
+    permissions:
+      microphone: allow
+- extendedWaitUntil:
+    visible:
+      id: step.audio.import
+    timeout: 20000
