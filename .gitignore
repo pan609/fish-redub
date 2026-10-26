@@ -41,3 +41,6 @@ artifacts/
 !.vscode/extensions.json
 npm-debug.*
 yarn-error.*
+
+# 设计参考截图（App Store 素材，版权归原作者，仅本地参考不入库）
+design/reference/
