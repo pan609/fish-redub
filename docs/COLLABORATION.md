@@ -136,3 +136,16 @@
 | 5 | 低 | 转写 429 没有按 Retry-After 禁用重试 | 采纳 | 倒计时抽成共享 hook，转写与配音共用；store 动作层记录最早可重试时间，等待期内直接返回带剩余秒数的限流状态，不发请求 | store：转写、配音限流后等待期内重试都不再发请求 |
 
 5 条全部采纳，无分歧。iOS 回归（导入 → 生成 → 历史删除 → 返回配音页）与 Android 启动冒烟通过；单测 86 条、类型检查、lint 全部通过。
+
+---
+
+## 阶段四：测试评测
+
+### 4.1 产出
+
+- [TEST_REPORT.md](TEST_REPORT.md) v1.0：验收标准 → 用例映射、单测 87 条、Maestro 7 个流程双端各 7/7 通过、手动专项、5 个问题修复
+- 审查说明：[reviews/phase4-test-review-brief.md](reviews/phase4-test-review-brief.md)
+
+### 4.2 Codex 审查（PM 使用 Codex 桌面端执行）
+
+_待执行，结果保存到 `docs/reviews/phase4-test-codex.md`_

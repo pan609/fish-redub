@@ -25,7 +25,15 @@ name: 07 历史持久化与删除
 - tapOn: { id: history.detail.delete }
 # 系统确认框里的"删除"（页面上也有同名按钮，按弹窗位置点击）
 - extendedWaitUntil: { visible: "删除这条记录？", timeout: 5000 }
-- tapOn: { point: "69%,56%" }
+- runFlow:
+    when: { platform: iOS }
+    commands:
+      - tapOn: { point: "69%,56%" }
+- runFlow:
+    when: { platform: Android }
+    commands:
+      # RN Alert 在 Android 上把最后一个按钮（删除）映射为 positive 按钮
+      - tapOn: { id: "android:id/button1" }
 - extendedWaitUntil: { visible: "1 条记录", timeout: 10000 }
 - tapOn: "配音"
 - scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
