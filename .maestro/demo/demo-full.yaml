@@ -12,7 +12,8 @@ name: 演示：完整流程
 - runFlow: { file: pause.yaml, env: { MS: 2500 } }
 
 # ① 录音（录音期间由宿主机朗读一句中文）
-- tapOn: { id: step.audio.record }
+- tapOn: { id: step.audio.record, retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "recorder.toggle|recorder.permission" }, timeout: 10000 }
 - runFlow:
     when: { visible: { id: recorder.permission } }
     commands:
@@ -57,7 +58,8 @@ name: 演示：完整流程
 - inputText: "谢谢收听"
 - pressKey: Enter
 - runFlow: { file: pause.yaml, env: { MS: 2000 } }
-- tapOn: { id: step.text.confirm }
+- tapOn: { id: step.text.confirm, retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: step.voice.change }, timeout: 8000 }
 - runFlow: { file: pause.yaml, env: { MS: 1500 } }
 
 # ④ 声音：试听解说男声并选中
