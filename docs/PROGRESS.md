@@ -33,7 +33,7 @@
 | Android | SDK 已装；AVD：Pixel_4、Pixel_9、Pixel_9_Pro；JDK 17 |
 | Maestro | `~/.maestro/bin/maestro`（不在 PATH 中，需使用完整路径） |
 | Codex CLI | 0.164.0，已登录 |
-| Git 身份 | 仓库级：`pany-05 <pany.panpan05@gmail.com>`；远程 https://github.com/pany-05/fish-redub（公开） |
+| Git 身份 | 仓库级：`pan609 <53222181+pan609@users.noreply.github.com>`；远程 https://github.com/pan609/fish-redub（公开） |
 
 ## 关键事实（防遗忘）
 
@@ -54,3 +54,4 @@
 | 2026-10-26 | 阶段二通过；阶段三：SDK 58 脚手架、依赖安装、M0 双端原生能力验证（结果见 PLAN §5）、PLAN v0.1、声音资源与测试音频入库；PM 补充决策方向"健壮优先、不吹毛求疵" |
 | 2026-10-26 | 处理 PLAN 审查 6 条（全部采纳）：存储改为每条记录独立 meta.json、任务代次失效、保存重试分离、分层故障注入、原生 60 秒上限；PLAN v0.2、PRD v1.2；PM 确认 GitHub 仓库公开，需保证密钥与环境隐私 |
 | 2026-10-26 | 编码 M1–M8 完成并推送；77 条单测；双端联调修复 7 个问题（PLAN §5.1）；录音路径受本机麦克风授权限制待补测 |
+| 2026-10-26 | PM 更正 GitHub 账号为 pan609：全部历史提交作者改为 pan609（noreply 邮箱），仓库迁移到 pan609/fish-redub |

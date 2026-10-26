@@ -15,9 +15,9 @@
 - 阶段顺序：产品设计 → UI 设计 → 编码 → 测试评测 → 优化 → 交付材料；每阶段经审查和 PM 确认后再进入下一阶段。
 - 文档、注释使用中文。
 - 密钥只放 `.env.local`，绝不写入源码或文档。仓库已配置 `core.hooksPath=.githooks`，pre-commit 会拦截密钥、令牌、本机绝对路径和 .env 文件（新克隆需执行 `git config core.hooksPath .githooks`）。
-- 仓库公开：https://github.com/pany-05/fish-redub ；文档里不写本机绝对路径。
-- 推送时临时使用 pany-05 的 gh 令牌（不切换全局 gh 账号、不把令牌写进 .git/config）：
-  `git -c credential.helper= -c "credential.helper=!f(){ echo username=pany-05; echo password=$(gh auth token --user pany-05); }; f" push`
-- Git 身份：`pany-05 <pany.panpan05@gmail.com>`（仓库级配置）。
+- 仓库公开：https://github.com/pan609/fish-redub （GitHub 个人账号 pan609）；文档里不写本机绝对路径。
+- 推送时显式使用 pan609 的 gh 令牌（不切换全局 gh 账号、不把令牌写进 .git/config）：
+  `git -c credential.helper= -c "credential.helper=!f(){ echo username=pan609; echo password=$(gh auth token --user pan609); }; f" push`
+- Git 身份：`pan609 <53222181+pan609@users.noreply.github.com>`（仓库级配置；GitHub noreply 邮箱，提交归属 pan609 且不暴露私人邮箱）。
 - Maestro 路径：`~/.maestro/bin/maestro`。
 - Pencil：PM 在 Pen 中打开的工作文件为 `~/.pencil/documents/b7e0384a-ab19-46ea-ae0b-f317e9741917/fishRN.pen`；项目内 `design/fishRN.pen` 是快照，改稿后需重新复制。

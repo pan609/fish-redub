@@ -272,4 +272,4 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 
 - 提交信息使用中文，格式 `<类型>: <说明>`（feat / fix / refactor / test / docs / chore / design）。
 - 每次提交前确认 `git diff --cached` 中没有 `sk-fish-`。
-- GitHub 远程仓库待 PM 确认公开或私有后创建（账号 `pany-05`）。
+- GitHub 远程仓库：https://github.com/pan609/fish-redub （公开）。
