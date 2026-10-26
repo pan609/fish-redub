@@ -40,13 +40,14 @@ export function AmbientGlow() {
   const { colors } = useTheme();
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
-      <View style={[styles.glow, { top: -140, right: -120, backgroundColor: colors.glowA }]} />
-      <View style={[styles.glow, { top: 420, left: -160, backgroundColor: colors.glowB }]} />
+      <View style={[styles.glow, { top: -170, right: -150, experimental_backgroundImage: `radial-gradient(circle, ${colors.glowA} 0%, transparent 70%)` }]} />
+      <View style={[styles.glow, { top: 400, left: -190, experimental_backgroundImage: `radial-gradient(circle, ${colors.glowB} 0%, transparent 70%)` }]} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   tag: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.chip, alignSelf: 'flex-start' },
-  glow: { position: 'absolute', width: 340, height: 340, borderRadius: 170, filter: [{ blur: 80 }] },
+  // iOS 不支持 filter: blur，用径向渐变模拟柔和光晕
+  glow: { position: 'absolute', width: 420, height: 420 },
 });

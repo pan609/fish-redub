@@ -44,33 +44,33 @@ export default function RedubScreen() {
   const offline = network.isConnected === false || network.isInternetReachable === false;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      <AmbientGlow />
+    // ScrollView 必须是页面根视图，iOS 大标题才能随滚动收起
+    <ScrollView
+      ref={scrollRef}
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      contentInsetAdjustmentBehavior="automatic"
+      automaticallyAdjustKeyboardInsets
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={styles.content}
+      testID="redub.scroll">
       <Stack.Screen
         options={{
           title: '配音',
           headerRight: () => <BrandMark />,
         }}
       />
-      <ScrollView
-        ref={scrollRef}
-        contentInsetAdjustmentBehavior="automatic"
-        automaticallyAdjustKeyboardInsets
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.content}
-        testID="redub.scroll">
-        {!env.isConfigured ? <InlineAlert kind="error" message={ERROR_MESSAGES.not_configured} testID="alert.not_configured" /> : null}
-        {offline ? <InlineAlert kind="warning" message="网络不可用，转写和配音需要联网" testID="alert.offline_banner" /> : null}
+      <AmbientGlow />
+      {!env.isConfigured ? <InlineAlert kind="error" message={ERROR_MESSAGES.not_configured} testID="alert.not_configured" /> : null}
+      {offline ? <InlineAlert kind="warning" message="网络不可用，转写和配音需要联网" testID="alert.offline_banner" /> : null}
 
-        <Stepper current={current} />
-        <StepAudio />
-        <View onLayout={(e) => (textY.current = e.nativeEvent.layout.y)}>
-          <StepText onInputFocus={() => setTimeout(() => scrollRef.current?.scrollTo({ y: Math.max(0, textY.current - 12), animated: true }), 250)} />
-        </View>
-        <StepVoice />
-        <StepDub />
-      </ScrollView>
-    </View>
+      <Stepper current={current} />
+      <StepAudio />
+      <View onLayout={(e) => (textY.current = e.nativeEvent.layout.y)}>
+        <StepText onInputFocus={() => setTimeout(() => scrollRef.current?.scrollTo({ y: Math.max(0, textY.current - 12), animated: true }), 250)} />
+      </View>
+      <StepVoice />
+      <StepDub />
+    </ScrollView>
   );
 }
 

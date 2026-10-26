@@ -22,8 +22,7 @@ export default function HistoryScreen() {
   useFocusEffect(useCallback(() => () => audioCoordinator.stopAll(), []));
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      <AmbientGlow />
+    <>
       <Stack.Screen
         options={{
           title: '历史',
@@ -36,16 +35,22 @@ export default function HistoryScreen() {
         }}
       />
       <FlatList
+        style={{ flex: 1, backgroundColor: colors.bg }}
         data={records}
         keyExtractor={(r) => (r.kind === 'ok' ? r.record.id : r.id)}
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={[styles.list, !records.length && { flexGrow: 1 }]}
-        ListHeaderComponent={loadError ? <InlineAlert kind="error" message="读取历史记录时出现问题，已保留现有文件" /> : undefined}
+        ListHeaderComponent={
+          <>
+            <AmbientGlow />
+            {loadError ? <InlineAlert kind="error" message="读取历史记录时出现问题，已保留现有文件" /> : null}
+          </>
+        }
         ListEmptyComponent={<Empty />}
         renderItem={({ item, index }) => <HistoryCard item={item} index={index} />}
         testID="history.list"
       />
-    </View>
+    </>
   );
 }
 

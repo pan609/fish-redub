@@ -24,10 +24,9 @@ export default function HistoryDetailScreen() {
   useFocusEffect(useCallback(() => () => audioCoordinator.stopAll(), []));
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      <AmbientGlow />
+    <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.content}>
       <Stack.Screen options={{ title: '', headerLargeTitle: false, headerBackTitle: '历史' }} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.content}>
+        <AmbientGlow />
         {!item ? (
           <InlineAlert kind="warning" message="记录不存在或已删除" />
         ) : item.kind === 'broken' ? (
@@ -35,8 +34,7 @@ export default function HistoryDetailScreen() {
         ) : (
           <Detail item={item} />
         )}
-      </ScrollView>
-    </View>
+    </ScrollView>
   );
 }
 
