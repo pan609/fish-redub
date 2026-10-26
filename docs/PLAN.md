@@ -114,7 +114,7 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 
 ### 3.2 Fish API 客户端
 
-- 统一 `request()`：`AbortController` 同时承担超时（转写 30 秒、生成 60 秒）和用户取消；能区分 `timeout` 与 `cancelled`。**超时计时覆盖到响应体读取完毕**（`arrayBuffer()` / `json()` 结束才清除定时器），响应体读到一半断流归为 `incomplete_audio`（TTS）或 `server`（ASR）。
+- 统一 `request()`（所有等待都与中止信号赛跑，底层不响应 abort 时超时和取消也能结束请求）：`AbortController` 同时承担超时（转写 30 秒、生成 60 秒）和用户取消；能区分 `timeout` 与 `cancelled`。**超时计时覆盖到响应体读取完毕**（`arrayBuffer()` / `json()` 结束才清除定时器），响应体读到一半断流归为 `incomplete_audio`（TTS）或 `server`（ASR）。
 - **错误归一化** `AppError { code, message, retryable, retryAfterSec? }`，`code` ∈ `offline | timeout | auth | quota | rate_limit | bad_audio | bad_request | server | incomplete_audio | save_failed | cancelled | unknown`，文案统一来自 `copy/strings.ts`。
 - ASR：`multipart/form-data`（`audio` 文件 + `ignore_timestamps=true`），返回 `text`、`duration`、`language_code`。`text.trim()` 为空 → `empty`。
 - TTS：JSON `{ text, reference_id, format: 'mp3' }` → `arrayBuffer()` → **完整性校验**（有 Content-Length 时比对字节数；字节数 > 0；Content-Type 为 audio；MP3 文件头为 ID3 或帧同步）→ 写入工作目录 → 用播放器加载确认时长 > 0。
@@ -233,7 +233,7 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 
 | 风险 | 对策 |
 |---|---|
-| RN `fetch` 上传本地文件（multipart）与读取二进制响应在两端行为差异 | M2 先用真实接口在双端各跑一次 ASR / TTS；如有问题改用 `expo/fetch` 或 `File.upload` |
+| RN `fetch` 上传本地文件（multipart）与读取二进制响应在两端行为差异 | ✅ M2 已在双端用真实接口验证。发现：SDK 58 的全局 `fetch` 是 `expo/fetch`，multipart 不支持 RN 传统的 `{uri,name,type}`，改为直接 append `expo-file-system` 的 `File`；二进制响应 `arrayBuffer()` 双端正常 |
 | iOS 录音后外放变小 | 录音结束立即恢复播放模式；M4 专项验证 |
 | 模拟器麦克风不稳定 | iOS 模拟器使用 Mac 麦克风；Android 模拟器开启主机音频输入；同时准备导入用测试音频 |
 | SAF 写入在不同 Android 版本上的差异 | M7 在 Android 模拟器验证；失败时降级为分享面板 |

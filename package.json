@@ -60,7 +60,14 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/ios/",
-      "/android/"
+      "/android/",
+      "/__tests__/helpers/"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
     ]
   }
 }
