@@ -5,6 +5,7 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { findVoice, LANGUAGE_LABEL } from '@/config/voices';
 import { useExportActions } from '@/features/redub/components/ResultCard';
 import { findRecord, useHistory } from '@/features/history/store';
+import { useRedub } from '@/features/redub/store';
 import { audioCoordinator } from '@/services/audio/coordinator';
 import { toAppError, type AppError } from '@/services/errors';
 import type { LoadedRecord } from '@/services/storage/historyRepo';
@@ -144,6 +145,8 @@ function useDelete(id: string) {
           audioCoordinator.stopAll();
           try {
             await removeRecord(id);
+            // 主流程若正展示这条记录的结果，一并失效，避免引用已删除的文件（代码审查 #4）
+            useRedub.getState().forgetRecord(id);
             router.back();
           } catch (e) {
             setError(toAppError(e, 'save_failed'));

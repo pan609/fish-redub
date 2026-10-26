@@ -238,6 +238,12 @@ export function audioReceived(s: RedubState, requestId: number, pending: Pending
   return { ...s, dub: { kind: 'saving', requestId, pending, previous: s.dub.previous } };
 }
 
+/** 待保存的音频未通过解码校验：不得落库，回到"请求失败"，重试会重新生成（代码审查 #2） */
+export function pendingRejected(s: RedubState, recordId: string, error: AppError): RedubState {
+  if (s.dub.kind !== 'saving' || s.dub.pending.recordId !== recordId) return s;
+  return { ...s, dub: { kind: 'failed', error, snapshot: s.dub.pending.snapshot, previous: s.dub.previous } };
+}
+
 export function saveFailed(s: RedubState, recordId: string, error: AppError): RedubState {
   if (s.dub.kind !== 'saving' || s.dub.pending.recordId !== recordId) return s;
   return { ...s, dub: { kind: 'saveFailed', error, pending: s.dub.pending, previous: s.dub.previous } };
@@ -252,6 +258,44 @@ export function saveRetried(s: RedubState, requestId: number): RedubState {
 export function saveSucceeded(s: RedubState, result: DubResult): RedubState {
   if (s.dub.kind !== 'saving' || s.dub.pending.recordId !== result.recordId) return s;
   return { ...s, dub: { kind: 'success', result } };
+}
+
+/** 限流等待期内拦截请求，直接给出带剩余秒数的失败状态（PRD §7.2，代码审查 #5） */
+export function transcribeBlocked(s: RedubState, error: AppError): RedubState {
+  if (s.source.kind !== 'ready') return s;
+  return { ...s, text: { kind: 'failed', error } };
+}
+
+export function generateBlocked(s: RedubState, snapshot: DubSnapshot, error: AppError): RedubState {
+  if (isDubLocked(s)) return s;
+  return { ...s, dub: { kind: 'failed', error, snapshot, previous: lastResult(s.dub) } };
+}
+
+/** 历史中删除了某条记录：当前页面引用它的结果随之失效（代码审查 #4） */
+export function recordRemoved(s: RedubState, recordId: string): RedubState {
+  const d = s.dub;
+  if (d.kind === 'success') return d.result.recordId === recordId ? { ...s, dub: { kind: 'idle' } } : s;
+  if ('previous' in d && d.previous?.recordId === recordId) return { ...s, dub: { ...d, previous: undefined } };
+  return s;
+}
+
+/**
+ * 是否提供"生成配音"入口。除常规情况外，保存失败后用户已修改文字或声音时，
+ * 也要允许按新内容生成，不能强制先保存已放弃的旧结果（代码审查 #3）。
+ */
+export function shouldOfferGenerate(s: RedubState): boolean {
+  if (!canGenerate(s)) return false;
+  const d = s.dub;
+  if (d.kind === 'idle') return true;
+  if (d.kind === 'success') return isResultExpired(s, d.result);
+  if (d.kind === 'failed') return !d.error.retryable || snapshotDiffers(s, d.snapshot);
+  if (d.kind === 'saveFailed') return snapshotDiffers(s, d.pending.snapshot);
+  return false;
+}
+
+function snapshotDiffers(s: RedubState, snap: DubSnapshot): boolean {
+  const cur = currentSnapshot(s);
+  return !cur || cur.sourceId !== snap.sourceId || cur.finalText !== snap.finalText || cur.voiceId !== snap.voiceId;
 }
 
 /** 当前展示的结果（成功，或失败 / 生成中时保留的上一次结果） */

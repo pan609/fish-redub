@@ -72,11 +72,25 @@ export function createHistoryRepo(fs: FsAdapter, rootUri: string) {
     };
   };
 
+  /**
+   * 读取元数据：读文件出错（I/O）时向外抛出，由调用方按"无法判断"处理、绝不据此删除；
+   * 只有内容确实无效（JSON 损坏、字段不符）才返回 null（代码审查 #1）。
+   */
   const parseMeta = async (uri: string): Promise<HistoryRecord | null> => {
+    const text = await fs.readText(uri);
     try {
-      const data = JSON.parse(await fs.readText(uri));
+      const data = JSON.parse(text);
       if (data && data.version === 1 && typeof data.id === 'string' && typeof data.finalText === 'string') return data;
       return null;
+    } catch {
+      return null;
+    }
+  };
+
+  /** 读取元数据，I/O 出错时视为无效（只用于不会触发删除的场景） */
+  const parseMetaSafe = async (uri: string): Promise<HistoryRecord | null> => {
+    try {
+      return await parseMeta(uri);
     } catch {
       return null;
     }
@@ -99,10 +113,19 @@ export function createHistoryRepo(fs: FsAdapter, rootUri: string) {
           const metaUri = join(dir, META);
           const tmpUri = join(dir, META_TMP);
           if (fs.exists(metaUri)) {
-            const rec = await parseMeta(metaUri);
+            let rec: HistoryRecord | null;
+            try {
+              rec = await parseMeta(metaUri);
+            } catch {
+              // 读不出来：保留为损坏记录，并停止本次清理
+              healthy = false;
+              results.push({ kind: 'broken', id, dirUri: dir });
+              continue;
+            }
             results.push(rec && rec.id === id ? toLoaded(rec) : { kind: 'broken', id, dirUri: dir });
           } else if (fs.exists(tmpUri)) {
-            // 第 4 步（重命名）之前崩溃：临时元数据完整就补做重命名
+            // 第 4 步（重命名）之前崩溃：临时元数据完整就补做重命名。
+            // 读取出错会抛到外层 catch，标记为不健康，跳过清理，目录保留到下次启动
             const rec = await parseMeta(tmpUri);
             if (rec && rec.id === id && fs.exists(join(dir, rec.sourceFile)) && fs.exists(join(dir, rec.dubFile))) {
               fs.rename(tmpUri, META);
@@ -143,8 +166,10 @@ export function createHistoryRepo(fs: FsAdapter, rootUri: string) {
 
       // 1. 已提交 → 直接返回
       if (fs.exists(metaUri)) {
-        const existing = await parseMeta(metaUri);
+        const existing = await parseMetaSafe(metaUri);
         if (existing) return toLoaded(existing);
+        // 已存在但读不出来：不覆盖、不删除，交给用户重试
+        throw appError('save_failed', { detail: '记录元数据已存在但无法读取' });
       }
 
       const record: HistoryRecord = {
@@ -169,7 +194,7 @@ export function createHistoryRepo(fs: FsAdapter, rootUri: string) {
         // 3. 写临时元数据并读回校验
         const tmpUri = join(dir, META_TMP);
         await fs.writeText(tmpUri, JSON.stringify(record));
-        const check = await parseMeta(tmpUri);
+        const check = await parseMetaSafe(tmpUri);
         if (!check || check.id !== id) throw new Error('元数据读回校验失败');
 
         // 4. 重命名为 meta.json（目标不存在，同目录原子重命名）→ 提交成功

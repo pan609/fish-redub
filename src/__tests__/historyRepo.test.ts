@@ -131,6 +131,55 @@ describe('historyRepo', () => {
     expect(mem.files.has('file:///doc/records/half/dub.mp3')).toBe(true);
   });
 
+  it('恢复临时元数据时读取出错：保留目录，不删除音频（代码审查 #1）', async () => {
+    const mem = createMemoryFs();
+    const repo = createHistoryRepo(mem.fs, ROOT);
+    mem.files.set('file:///doc/work/src.m4a', new Uint8Array([1]));
+    mem.files.set('file:///doc/work/dub.mp3', new Uint8Array([2]));
+    await repo.commit(input('a'));
+    const meta = mem.files.get(metaPath('a'))!;
+    mem.files.delete(metaPath('a'));
+    mem.files.set('file:///doc/records/a/meta.json.tmp', meta);
+    const flaky = createHistoryRepo(
+      {
+        ...mem.fs,
+        readText: async (uri) => {
+          if (uri.endsWith('meta.json.tmp')) throw new Error('I/O 错误');
+          return mem.fs.readText(uri);
+        },
+      },
+      ROOT,
+    );
+    await flaky.load();
+    expect(mem.files.has('file:///doc/records/a/dub.mp3')).toBe(true);
+    expect(mem.files.has('file:///doc/records/a/meta.json.tmp')).toBe(true);
+    // I/O 恢复后再次加载可以正常恢复
+    expect((await repo.load())[0].kind).toBe('ok');
+  });
+
+  it('meta.json 读取出错：列为损坏且本次不清理其他残留目录', async () => {
+    const mem = createMemoryFs();
+    const repo = createHistoryRepo(mem.fs, ROOT);
+    mem.files.set('file:///doc/work/src.m4a', new Uint8Array([1]));
+    mem.files.set('file:///doc/work/dub.mp3', new Uint8Array([2]));
+    await repo.commit(input('a'));
+    mem.fs.mkdir('file:///doc/records/half/');
+    mem.files.set('file:///doc/records/half/dub.mp3', new Uint8Array([1]));
+    const flaky = createHistoryRepo(
+      {
+        ...mem.fs,
+        readText: async (uri) => {
+          if (uri === metaPath('a')) throw new Error('I/O 错误');
+          return mem.fs.readText(uri);
+        },
+      },
+      ROOT,
+    );
+    const list = await flaky.load();
+    expect(list.find((r) => r.kind === 'broken')).toBeTruthy();
+    expect(mem.files.has('file:///doc/records/half/dub.mp3')).toBe(true);
+  });
+
   it('列表按创建时间倒序', async () => {
     const { repo } = setup();
     await repo.commit(input('a', '2026-10-24T01:00:00.000Z'));

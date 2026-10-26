@@ -173,6 +173,34 @@ describe('配音', () => {
   });
 });
 
+describe('生成入口与记录删除', () => {
+  it('保存失败后修改了声音：提供按新内容生成的入口（代码审查 #3）', () => {
+    let s = confirmed();
+    const snap = M.currentSnapshot(s)!;
+    s = M.generateStarted(s, 1, snap);
+    s = M.audioReceived(s, 1, { recordId: 'r1', snapshot: snap, durationMs: 1, createdAt: 'now' });
+    s = M.saveFailed(s, 'r1', appError('save_failed'));
+    expect(M.shouldOfferGenerate(s)).toBe(false);
+    s = M.selectVoice(s, VOICES.find((v) => v.id !== s.voiceId)!.id);
+    expect(M.shouldOfferGenerate(s)).toBe(true);
+    expect(M.generateStarted(s, 2, M.currentSnapshot(s)!).dub.kind).toBe('generating');
+  });
+
+  it('删除的记录若是当前结果，结果失效；其他记录不受影响', () => {
+    const s = success();
+    expect(M.recordRemoved(s, 'other')).toBe(s);
+    expect(M.recordRemoved(s, 'r1').dub.kind).toBe('idle');
+  });
+
+  it('待保存音频解码失败回到请求失败状态，不能重试保存', () => {
+    let s = confirmed();
+    const snap = M.currentSnapshot(s)!;
+    s = M.audioReceived(M.generateStarted(s, 1, snap), 1, { recordId: 'r1', snapshot: snap, durationMs: 0, createdAt: 'now' });
+    s = M.pendingRejected(s, 'r1', appError('incomplete_audio'));
+    expect(s.dub.kind).toBe('failed');
+  });
+});
+
 describe('结果过期（实时计算）', () => {
   it('刚生成时不过期', () => {
     const s = success();

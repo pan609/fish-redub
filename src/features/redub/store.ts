@@ -32,6 +32,8 @@ type Actions = {
   generate: () => Promise<void>;
   cancelGenerate: () => void;
   retrySave: () => Promise<void>;
+  /** 历史中删除记录后调用：引用该记录的当前结果失效 */
+  forgetRecord: (recordId: string) => void;
 };
 
 export type RedubStore = M.RedubState & Actions;
@@ -40,6 +42,18 @@ let transcribeSeq = 0;
 let transcribeCtrl: AbortController | null = null;
 let generateSeq = 0;
 let generateCtrl: AbortController | null = null;
+// 429 限流后的最早可重试时间（毫秒时间戳），在动作层拦截（PRD §7.2）
+let transcribeNotBefore = 0;
+let generateNotBefore = 0;
+
+const notBefore = (e: AppError) => (e.code === 'rate_limit' && e.retryAfterSec ? Date.now() + e.retryAfterSec * 1000 : 0);
+const remainingSec = (t: number) => Math.ceil((t - Date.now()) / 1000);
+
+/** 仅供单元测试：清除限流等待期 */
+export function resetRateLimitsForTests() {
+  transcribeNotBefore = 0;
+  generateNotBefore = 0;
+}
 
 const removeQuietly = (uri?: string) => {
   if (!uri) return;
@@ -68,11 +82,23 @@ export const useRedub = create<RedubStore>((set, get) => {
       }
       const audio = s.source.audio;
       let dubUri = pending.audioUri;
+      let durationMs = pending.durationMs;
       if (!dubUri && pending.audioBytes) {
         dubUri = join(docWorkDir(), `${recordId}.mp3`);
         await expoFs.writeBytes(dubUri, pending.audioBytes);
       }
       if (!dubUri) throw appError('save_failed', { detail: '没有可保存的配音数据' });
+
+      // 所有保存入口统一做解码校验：未校验过的音频（内存兜底写入）必须先通过才能落库（代码审查 #2）
+      if (durationMs <= 0) {
+        const probed = await probeDurationMs(dubUri);
+        if (!probed) {
+          removeQuietly(dubUri);
+          apply(M.pendingRejected(get(), recordId, appError('incomplete_audio', { detail: '播放器无法加载生成的音频' })));
+          return;
+        }
+        durationMs = probed;
+      }
 
       const loaded = await useHistory.getState().commit({
         record: {
@@ -85,7 +111,7 @@ export const useRedub = create<RedubStore>((set, get) => {
           voice: { id: snapshot.voiceId, name: snapshot.voiceName },
           language: s.text.kind === 'confirmed' ? s.text.language : undefined,
           createdAt: pending.createdAt,
-          dubDurationMs: pending.durationMs || undefined,
+          dubDurationMs: durationMs,
         },
         sourceUri: audio.uri,
         sourceExt: audio.ext,
@@ -98,7 +124,7 @@ export const useRedub = create<RedubStore>((set, get) => {
           snapshot,
           sourceUri: loaded.sourceUri,
           dubUri: loaded.dubUri,
-          durationMs: pending.durationMs,
+          durationMs,
           createdAt: pending.createdAt,
         }),
       );
@@ -136,6 +162,10 @@ export const useRedub = create<RedubStore>((set, get) => {
     startTranscribe: () => {
       const s = get();
       if (s.source.kind !== 'ready') return;
+      if (Date.now() < transcribeNotBefore) {
+        apply(M.transcribeBlocked(s, appError('rate_limit', { retryAfterSec: remainingSec(transcribeNotBefore) })));
+        return;
+      }
       const requestId = ++transcribeSeq;
       transcribeCtrl?.abort();
       const ctrl = new AbortController();
@@ -143,7 +173,11 @@ export const useRedub = create<RedubStore>((set, get) => {
       apply(M.transcribeStarted(s, requestId));
       transcribe({ uri: s.source.audio.uri, signal: ctrl.signal })
         .then((r) => apply(M.transcribeSucceeded(get(), requestId, r)))
-        .catch((e) => apply(M.transcribeFailed(get(), requestId, toAppError(e))));
+        .catch((e) => {
+          const err = toAppError(e);
+          transcribeNotBefore = Math.max(transcribeNotBefore, notBefore(err));
+          apply(M.transcribeFailed(get(), requestId, err));
+        });
     },
 
     cancelTranscribe: () => {
@@ -163,6 +197,10 @@ export const useRedub = create<RedubStore>((set, get) => {
       const s = get();
       const snapshot = M.currentSnapshot(s);
       if (!snapshot || !M.canGenerate(s)) return;
+      if (Date.now() < generateNotBefore) {
+        apply(M.generateBlocked(s, snapshot, appError('rate_limit', { retryAfterSec: remainingSec(generateNotBefore) })));
+        return;
+      }
       const requestId = ++generateSeq;
       generateCtrl?.abort();
       const ctrl = new AbortController();
@@ -173,7 +211,9 @@ export const useRedub = create<RedubStore>((set, get) => {
       try {
         bytes = await synthesize({ text: snapshot.finalText, voiceId: snapshot.voiceId, signal: ctrl.signal });
       } catch (e) {
-        apply(M.generateFailed(get(), requestId, toAppError(e)));
+        const err = toAppError(e);
+        generateNotBefore = Math.max(generateNotBefore, notBefore(err));
+        apply(M.generateFailed(get(), requestId, err));
         return;
       }
       if (!isCurrentDub(requestId)) return;
@@ -217,6 +257,8 @@ export const useRedub = create<RedubStore>((set, get) => {
       generateCtrl?.abort();
       apply(M.generateCancelled(get()));
     },
+
+    forgetRecord: (recordId) => apply(M.recordRemoved(get(), recordId)),
 
     retrySave: async () => {
       const d = get().dub;

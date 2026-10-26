@@ -1,5 +1,5 @@
 import { initialState } from '@/features/redub/machine';
-import { useRedub } from '@/features/redub/store';
+import { resetRateLimitsForTests, useRedub } from '@/features/redub/store';
 import { appError } from '@/services/errors';
 
 // jest.mock 会被提升到 import 之前执行
@@ -7,14 +7,16 @@ import { appError } from '@/services/errors';
 const mockSynthesize = jest.fn();
 const mockTranscribe = jest.fn();
 const mockCommit = jest.fn();
+const mockProbe = jest.fn(async () => 3000 as number | null);
+const mockWriteBytes = jest.fn(async () => undefined);
 
 jest.mock('@/services/fish/tts', () => ({ synthesize: (...a: any[]) => mockSynthesize(...a) }));
 jest.mock('@/services/fish/asr', () => ({ transcribe: (...a: any[]) => mockTranscribe(...a) }));
-jest.mock('@/services/audio/probe', () => ({ probeDurationMs: async () => 3000 }));
+jest.mock('@/services/audio/probe', () => ({ probeDurationMs: (...a: any[]) => (mockProbe as any)(...a) }));
 jest.mock('@/services/storage/paths', () => ({ docWorkDir: () => 'file:///doc/work/' }));
 jest.mock('@/services/storage/fs', () => ({
   join: (...p: string[]) => p.join('/').replace(/\/+/g, '/').replace('file:/', 'file:///'),
-  expoFs: { writeBytes: async () => undefined, remove: () => undefined },
+  expoFs: { writeBytes: (...a: any[]) => (mockWriteBytes as any)(...a), remove: () => undefined },
 }));
 jest.mock('@/features/history/store', () => ({
   useHistory: { getState: () => ({ commit: (...a: any[]) => mockCommit(...a) }) },
@@ -46,6 +48,9 @@ const okCommit = (input: any) =>
 
 beforeEach(() => {
   jest.clearAllMocks();
+  mockProbe.mockImplementation(async () => 3000);
+  mockWriteBytes.mockImplementation(async () => undefined);
+  resetRateLimitsForTests();
   useRedub.setState(initialState);
 });
 
@@ -102,6 +107,46 @@ describe('主流程 store', () => {
     mockSynthesize.mockRejectedValueOnce(appError('rate_limit', { retryAfterSec: 5 }));
     await useRedub.getState().generate();
     expect(useRedub.getState().dub).toMatchObject({ kind: 'failed', error: { code: 'rate_limit', retryAfterSec: 5 } });
+  });
+
+  it('工作文件写入失败后的内存兜底也必须通过解码校验，否则不落库（代码审查 #2）', async () => {
+    await toConfirmed();
+    mockSynthesize.mockResolvedValueOnce(new Uint8Array([0x49, 0x44, 0x33]));
+    mockWriteBytes.mockRejectedValueOnce(new Error('磁盘已满')); // 首次写工作文件失败
+    mockProbe.mockImplementation(async () => null); // 兜底写入后解码失败
+    await useRedub.getState().generate();
+    expect(mockCommit).not.toHaveBeenCalled();
+    expect(useRedub.getState().dub).toMatchObject({ kind: 'failed', error: { code: 'incomplete_audio' } });
+  });
+
+  it('删除历史记录后，主页面引用它的结果失效（代码审查 #4）', async () => {
+    await toConfirmed();
+    mockSynthesize.mockResolvedValueOnce(new Uint8Array([1, 2, 3]));
+    mockCommit.mockImplementationOnce(okCommit);
+    await useRedub.getState().generate();
+    const d = useRedub.getState().dub;
+    expect(d.kind).toBe('success');
+    useRedub.getState().forgetRecord((d as any).result.recordId);
+    expect(useRedub.getState().dub.kind).toBe('idle');
+  });
+
+  it('转写被限流后，等待期内重试不会再发请求（代码审查 #5）', async () => {
+    mockTranscribe.mockRejectedValueOnce(appError('rate_limit', { retryAfterSec: 30 }));
+    useRedub.getState().acceptSource(audio);
+    await flush();
+    expect(useRedub.getState().text).toMatchObject({ kind: 'failed', error: { code: 'rate_limit' } });
+    useRedub.getState().startTranscribe();
+    expect(mockTranscribe).toHaveBeenCalledTimes(1);
+    expect(useRedub.getState().text).toMatchObject({ kind: 'failed', error: { code: 'rate_limit' } });
+  });
+
+  it('配音被限流后，等待期内重试不会再发请求', async () => {
+    await toConfirmed();
+    mockSynthesize.mockRejectedValueOnce(appError('rate_limit', { retryAfterSec: 30 }));
+    await useRedub.getState().generate();
+    await useRedub.getState().generate();
+    expect(mockSynthesize).toHaveBeenCalledTimes(1);
+    expect(useRedub.getState().dub).toMatchObject({ kind: 'failed', error: { code: 'rate_limit' } });
   });
 
   it('生成中不能更换音源', async () => {

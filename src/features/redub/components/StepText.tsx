@@ -14,6 +14,7 @@ import { useTheme } from '@/ui/theme';
 import { radius, typography } from '@/ui/tokens';
 
 import { useSourceActions } from './StepAudio';
+import { useRetryCountdown, withCountdown } from './useRetryCountdown';
 
 export function StepText({ onInputFocus }: { onInputFocus?: () => void }) {
   const text = useRedub((s) => s.text);
@@ -21,6 +22,7 @@ export function StepText({ onInputFocus }: { onInputFocus?: () => void }) {
   const locked = useRedub(isDubLocked);
   const { startTranscribe, cancelTranscribe, startManualInput, editDraft, restoreTranscript, confirmText, reopenText } = useRedub();
   const { openRecorder, importFile } = useSourceActions();
+  const countdown = useRetryCountdown(text.kind === 'failed' ? text.error : undefined);
 
   if (!sourceReady || text.kind === 'locked') {
     return <StepCard index={2} title="文字" state="locked" status="添加音频后自动转写" testID="step.text" />;
@@ -69,8 +71,9 @@ export function StepText({ onInputFocus }: { onInputFocus?: () => void }) {
         <>
           <InlineAlert
             kind="error"
-            message={text.error.message}
+            message={withCountdown(text.error.message, countdown)}
             actionLabel={text.error.retryable ? '重试' : undefined}
+            actionDisabled={countdown > 0}
             onAction={text.error.retryable ? startTranscribe : undefined}
             testID={`alert.${text.error.code}`}
           />

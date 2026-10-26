@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Animated, StyleSheet, View } from 'react-native';
 
 import { findVoice } from '@/config/voices';
-import { canGenerate, isResultExpired, visibleResult, type DubResult } from '@/features/redub/machine';
+import { canGenerate, isResultExpired, shouldOfferGenerate, visibleResult, type DubResult } from '@/features/redub/machine';
 import { useRedub } from '@/features/redub/store';
-import type { AppError } from '@/services/errors';
 import { AppText } from '@/ui/components/AppText';
 import { Button, TextButton } from '@/ui/components/Button';
 import { InlineAlert } from '@/ui/components/InlineAlert';
@@ -12,20 +11,7 @@ import { StepCard, type StepState } from '@/ui/components/StepCard';
 import { useTheme } from '@/ui/theme';
 
 import { ResultCard } from './ResultCard';
-
-/** 429 时按 Retry-After 倒计时，结束前不能重试（PRD §7.2） */
-function useRetryCountdown(error: AppError | undefined) {
-  const total = error?.code === 'rate_limit' ? (error.retryAfterSec ?? 0) : 0;
-  const [tracked, setTracked] = useState({ error, left: total });
-  // 新的错误到来时重置倒计时（渲染期间根据 props 重置 state 的标准写法）
-  if (tracked.error !== error) setTracked({ error, left: total });
-  useEffect(() => {
-    if (!total) return;
-    const timer = setInterval(() => setTracked((t) => ({ ...t, left: Math.max(0, t.left - 1) })), 1000);
-    return () => clearInterval(timer);
-  }, [error, total]);
-  return tracked.error === error ? tracked.left : total;
-}
+import { useRetryCountdown, withCountdown } from './useRetryCountdown';
 
 export function StepDub() {
   const state = useRedub();
@@ -51,7 +37,7 @@ export function StepDub() {
   else if (result && expired) [stepState, status] = ['expired', '已过期'];
   else if (result) [stepState, status] = ['done', '已完成'];
 
-  const showGenerate = ready && (dub.kind === 'idle' || (dub.kind === 'success' && expired) || (dub.kind === 'failed' && !error?.retryable));
+  const showGenerate = shouldOfferGenerate(state);
   const textChanged = state.text.kind === 'confirmed' && result ? result.snapshot.finalText !== state.text.finalText : false;
   const regenerateLabel = !result ? '生成配音' : !textChanged && result.snapshot.voiceId !== state.voiceId ? '用新声音重新生成' : '用新文字重新生成';
 
@@ -65,7 +51,7 @@ export function StepDub() {
       {dub.kind === 'failed' ? (
         <InlineAlert
           kind="error"
-          message={countdown > 0 ? `${dub.error.message}（${countdown} 秒后可重试）` : dub.error.message}
+          message={withCountdown(dub.error.message, countdown)}
           actionLabel={dub.error.retryable ? '重试' : undefined}
           actionDisabled={countdown > 0 || !ready}
           onAction={dub.error.retryable ? generate : undefined}
@@ -74,7 +60,14 @@ export function StepDub() {
       ) : null}
 
       {dub.kind === 'saveFailed' ? (
-        <InlineAlert kind="error" message={dub.error.message} actionLabel="重试保存" onAction={retrySave} testID="alert.save_failed" />
+        <>
+          <InlineAlert kind="error" message={dub.error.message} actionLabel="重试保存" onAction={retrySave} testID="alert.save_failed" />
+          {showGenerate ? (
+            <AppText variant="callout" color="textTertiary">
+              文字或声音已修改。可以重试保存修改前的配音，或按新内容重新生成。
+            </AppText>
+          ) : null}
+        </>
       ) : null}
 
       {!confirmed && result ? (
