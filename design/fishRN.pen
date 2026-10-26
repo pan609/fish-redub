@@ -49,8 +49,9 @@
                   "name": "signal",
                   "width": 18,
                   "height": 18,
-                  "icon": "signal",
-                  "library": "lucide",
+                  "icon": "cell-signal-full-fill",
+                  "library": "phosphor",
+                  "weight": 500,
                   "fill": "$text-primary"
                 },
                 {
@@ -59,8 +60,9 @@
                   "name": "wifi",
                   "width": 18,
                   "height": 18,
-                  "icon": "wifi",
-                  "library": "lucide",
+                  "icon": "wifi-high-fill",
+                  "library": "phosphor",
+                  "weight": 500,
                   "fill": "$text-primary"
                 },
                 {
@@ -69,8 +71,9 @@
                   "name": "battery-full",
                   "width": 18,
                   "height": 18,
-                  "icon": "battery-full",
-                  "library": "lucide",
+                  "icon": "battery-full-fill",
+                  "library": "phosphor",
+                  "weight": 500,
                   "fill": "$text-primary"
                 }
               ]
@@ -175,8 +178,9 @@
               "name": "Icon",
               "width": 18,
               "height": 18,
-              "icon": "play",
-              "library": "lucide",
+              "icon": "play-fill",
+              "library": "phosphor",
+              "weight": 500,
               "fill": "$on-primary"
             }
           ]
@@ -188,8 +192,26 @@
           "reusable": true,
           "width": 40,
           "height": 40,
-          "fill": "$surface-muted",
+          "fill": "$glass",
           "cornerRadius": 999,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 20
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#1D1D1D14",
+              "offset": {
+                "x": 0,
+                "y": 4
+              },
+              "blur": 16
+            }
+          ],
           "justifyContent": "center",
           "alignItems": "center",
           "children": [
@@ -199,8 +221,9 @@
               "name": "Icon",
               "width": 20,
               "height": 20,
-              "icon": "x",
-              "library": "lucide",
+              "icon": "x-bold",
+              "library": "phosphor",
+              "weight": 500,
               "fill": "$text-primary"
             }
           ]
@@ -266,8 +289,9 @@
                       "name": "Icon",
                       "width": 22,
                       "height": 22,
-                      "icon": "audio-lines",
-                      "library": "lucide",
+                      "icon": "graphic_eq",
+                      "library": "Material Symbols Rounded",
+                      "weight": 500,
                       "fill": "$accent"
                     },
                     {
@@ -300,8 +324,9 @@
                       "name": "Icon",
                       "width": 22,
                       "height": 22,
-                      "icon": "history",
-                      "library": "lucide",
+                      "icon": "clock-counter-clockwise-bold",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -333,6 +358,36 @@
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "oX174",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "fHo6C",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
         {
           "id": "kGaUa",
           "type": "ref",
@@ -603,8 +658,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -658,8 +714,9 @@
                           "name": "Mic",
                           "width": 18,
                           "height": 18,
-                          "icon": "mic",
-                          "library": "lucide",
+                          "icon": "microphone-fill",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "$accent"
                         }
                       ]
@@ -720,7 +777,7 @@
                       "name": "Play",
                       "descendants": {
                         "azTBd": {
-                          "icon": "pause"
+                          "icon": "pause-fill"
                         }
                       }
                     },
@@ -1105,8 +1162,9 @@
                           "name": "Icon",
                           "width": 14,
                           "height": 14,
-                          "icon": "rotate-ccw",
-                          "library": "lucide",
+                          "icon": "arrow-counter-clockwise-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "$accent"
                         },
                         {
@@ -1348,6 +1406,36 @@
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "P2OdlJ",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "bCFVS",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
         {
           "id": "erAfl",
           "type": "ref",
@@ -1618,8 +1706,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -1673,8 +1762,9 @@
                           "name": "Mic",
                           "width": 18,
                           "height": 18,
-                          "icon": "mic",
-                          "library": "lucide",
+                          "icon": "microphone-fill",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "$accent"
                         }
                       ]
@@ -1768,8 +1858,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -1858,8 +1949,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -2019,8 +2111,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -2133,7 +2226,7 @@
                           "name": "Play",
                           "descendants": {
                             "azTBd": {
-                              "icon": "play"
+                              "icon": "play-fill"
                             }
                           }
                         },
@@ -2440,7 +2533,7 @@
                           "name": "Play",
                           "descendants": {
                             "azTBd": {
-                              "icon": "pause"
+                              "icon": "pause-fill"
                             }
                           }
                         },
@@ -2768,8 +2861,9 @@
                       "name": "Icon",
                       "width": 14,
                       "height": 14,
-                      "icon": "circle-check",
-                      "library": "lucide",
+                      "icon": "check-circle-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$success"
                     },
                     {
@@ -2805,28 +2899,88 @@
       "clip": true,
       "width": 390,
       "height": 844,
-      "fill": "#8F8A8B",
+      "fill": "$bg",
       "layout": "vertical",
+      "padding": [
+        0,
+        8,
+        8,
+        8
+      ],
       "justifyContent": "end",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "N07TVG",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "l75DA",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "o5nRD",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Scrim",
+          "fill": "$scrim",
+          "width": 390,
+          "height": 844
+        },
         {
           "type": "frame",
           "id": "qZK9u",
           "name": "Sheet",
           "width": "fill_container",
-          "fill": "$surface",
-          "cornerRadius": [
-            28,
-            28,
-            0,
-            0
+          "fill": "$glass-sheet",
+          "cornerRadius": 36,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 40
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#1D1D1D1F",
+              "offset": {
+                "x": 0,
+                "y": -4
+              },
+              "blur": 30
+            }
           ],
           "layout": "vertical",
           "gap": 20,
           "padding": [
             10,
             20,
-            40,
+            28,
             20
           ],
           "children": [
@@ -3874,8 +4028,14 @@
                   "name": "Record Ring",
                   "width": 96,
                   "height": 96,
-                  "fill": "#FF8C2224",
+                  "fill": "#FF8C221F",
                   "cornerRadius": 999,
+                  "stroke": "#FFFFFFB3",
+                  "strokeWidth": 1,
+                  "effect": {
+                    "type": "background_blur",
+                    "radius": 20
+                  },
                   "justifyContent": "center",
                   "alignItems": "center",
                   "children": [
@@ -3955,28 +4115,88 @@
       "clip": true,
       "width": 390,
       "height": 844,
-      "fill": "#8F8A8B",
+      "fill": "$bg",
       "layout": "vertical",
+      "padding": [
+        0,
+        8,
+        8,
+        8
+      ],
       "justifyContent": "end",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "r2Uhm",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "dRbdD",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "Nl5PM",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Scrim",
+          "fill": "$scrim",
+          "width": 390,
+          "height": 844
+        },
         {
           "type": "frame",
           "id": "d0uwFu",
           "name": "Sheet",
           "width": "fill_container",
-          "fill": "$surface",
-          "cornerRadius": [
-            28,
-            28,
-            0,
-            0
+          "fill": "$glass-sheet",
+          "cornerRadius": 36,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 40
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#1D1D1D1F",
+              "offset": {
+                "x": 0,
+                "y": -4
+              },
+              "blur": 30
+            }
           ],
           "layout": "vertical",
           "gap": 20,
           "padding": [
             10,
             20,
-            40,
+            28,
             20
           ],
           "children": [
@@ -4031,7 +4251,7 @@
                   "name": "Done",
                   "descendants": {
                     "ovKos": {
-                      "icon": "check"
+                      "icon": "check-bold"
                     }
                   }
                 }
@@ -4158,7 +4378,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "pause"
+                          "icon": "pause-fill"
                         }
                       }
                     }
@@ -4247,7 +4467,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     }
@@ -4322,8 +4542,9 @@
                               "name": "Selected",
                               "width": 16,
                               "height": 16,
-                              "icon": "circle-check",
-                              "library": "lucide",
+                              "icon": "check-circle-fill",
+                              "library": "phosphor",
+                              "weight": 500,
                               "fill": "$accent"
                             }
                           ]
@@ -4346,7 +4567,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     }
@@ -4435,7 +4656,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     }
@@ -4458,6 +4679,36 @@
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "C72jie",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "W6VKn",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
         {
           "id": "X9el4",
           "type": "ref",
@@ -4629,8 +4880,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "mic",
-                      "library": "lucide",
+                      "icon": "microphone-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -4743,8 +4995,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "music",
-                      "library": "lucide",
+                      "icon": "file-audio-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -4857,8 +5110,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "mic",
-                      "library": "lucide",
+                      "icon": "microphone-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -4994,8 +5248,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "music",
-                      "library": "lucide",
+                      "icon": "file-audio-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -5055,6 +5310,36 @@
       "layout": "vertical",
       "children": [
         {
+          "type": "ellipse",
+          "id": "K4ePxz",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "MGjn6",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
           "id": "Ej5yw",
           "type": "ref",
           "ref": "PIuQK",
@@ -5075,33 +5360,18 @@
           ],
           "children": [
             {
-              "type": "frame",
-              "id": "DC22A",
-              "name": "Nav",
-              "gap": 4,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "nrrOm",
-                  "name": "Back",
-                  "width": 24,
-                  "height": 24,
-                  "icon": "chevron-left",
-                  "library": "lucide",
-                  "fill": "$accent"
-                },
-                {
-                  "type": "text",
-                  "id": "Torg3",
-                  "name": "Label",
-                  "fill": "$accent",
-                  "content": "历史",
-                  "fontFamily": "$font",
-                  "fontSize": 17,
-                  "fontWeight": "500"
+              "id": "v9ndL",
+              "type": "ref",
+              "ref": "KY3Qx",
+              "name": "Glass Back",
+              "width": 44,
+              "height": 44,
+              "descendants": {
+                "ovKos": {
+                  "icon": "caret-left-bold",
+                  "fill": "$text-primary"
                 }
-              ]
+              }
             },
             {
               "type": "frame",
@@ -5193,7 +5463,7 @@
                       "name": "Play",
                       "descendants": {
                         "azTBd": {
-                          "icon": "pause"
+                          "icon": "pause-fill"
                         }
                       }
                     },
@@ -5500,7 +5770,7 @@
                       "name": "Play",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     },
@@ -5970,6 +6240,36 @@
       "layout": "vertical",
       "children": [
         {
+          "type": "ellipse",
+          "id": "gJ7sA",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "EIhkW",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
           "id": "oeF1Y",
           "type": "ref",
           "ref": "PIuQK",
@@ -6326,8 +6626,9 @@
                               "name": "Icon",
                               "width": 22,
                               "height": 22,
-                              "icon": "mic",
-                              "library": "lucide",
+                              "icon": "microphone-fill",
+                              "library": "phosphor",
+                              "weight": 500,
                               "fill": "#FFFFFF"
                             }
                           ]
@@ -6376,8 +6677,9 @@
                               "name": "Icon",
                               "width": 22,
                               "height": 22,
-                              "icon": "folder-open",
-                              "library": "lucide",
+                              "icon": "folder-open-fill",
+                              "library": "phosphor",
+                              "weight": 500,
                               "fill": "#FFFFFF"
                             }
                           ]
@@ -6666,6 +6968,36 @@
       "layout": "vertical",
       "children": [
         {
+          "type": "ellipse",
+          "id": "SOZNR",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "sql9p",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
           "id": "x6xXc",
           "type": "ref",
           "ref": "PIuQK",
@@ -6935,8 +7267,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -6990,8 +7323,9 @@
                           "name": "Mic",
                           "width": 18,
                           "height": 18,
-                          "icon": "mic",
-                          "library": "lucide",
+                          "icon": "microphone-fill",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "$accent"
                         }
                       ]
@@ -7132,8 +7466,9 @@
                       "name": "Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "triangle-alert",
-                      "library": "lucide",
+                      "icon": "warning-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$accent"
                     },
                     {
@@ -7252,8 +7587,9 @@
                       "name": "Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "circle-alert",
-                      "library": "lucide",
+                      "icon": "warning-circle-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$danger"
                     },
                     {
@@ -7298,8 +7634,9 @@
                       "name": "Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "circle-alert",
-                      "library": "lucide",
+                      "icon": "warning-circle-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$danger"
                     },
                     {
@@ -7344,8 +7681,9 @@
                       "name": "Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "circle-alert",
-                      "library": "lucide",
+                      "icon": "warning-circle-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$danger"
                     },
                     {
@@ -7386,6 +7724,36 @@
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "aGlQN",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "FdSn1",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
         {
           "id": "dtglD",
           "type": "ref",
@@ -7657,8 +8025,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -7736,8 +8105,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -7815,8 +8185,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -8057,28 +8428,88 @@
       "clip": true,
       "width": 390,
       "height": 844,
-      "fill": "#8F8A8B",
+      "fill": "$bg",
       "layout": "vertical",
+      "padding": [
+        0,
+        8,
+        8,
+        8
+      ],
       "justifyContent": "end",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "s1P0MZ",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "Uy6i2",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "zVohp",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Scrim",
+          "fill": "$scrim",
+          "width": 390,
+          "height": 844
+        },
         {
           "type": "frame",
           "id": "zJa4x",
           "name": "Sheet",
           "width": "fill_container",
-          "fill": "$surface",
-          "cornerRadius": [
-            28,
-            28,
-            0,
-            0
+          "fill": "$glass-sheet",
+          "cornerRadius": 36,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 40
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#1D1D1D1F",
+              "offset": {
+                "x": 0,
+                "y": -4
+              },
+              "blur": 30
+            }
           ],
           "layout": "vertical",
           "gap": 20,
           "padding": [
             10,
             20,
-            40,
+            28,
             20
           ],
           "children": [
@@ -8160,8 +8591,9 @@
                       "name": "Icon",
                       "width": 32,
                       "height": 32,
-                      "icon": "mic-off",
-                      "library": "lucide",
+                      "icon": "microphone-slash-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$accent"
                     }
                   ]
@@ -8238,28 +8670,88 @@
       "clip": true,
       "width": 390,
       "height": 844,
-      "fill": "#8F8A8B",
+      "fill": "$bg",
       "layout": "vertical",
+      "padding": [
+        0,
+        8,
+        8,
+        8
+      ],
       "justifyContent": "end",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "kY5uu",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "nhH3T",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "jgECr",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Scrim",
+          "fill": "$scrim",
+          "width": 390,
+          "height": 844
+        },
         {
           "type": "frame",
           "id": "p68nsj",
           "name": "Sheet",
           "width": "fill_container",
-          "fill": "$surface",
-          "cornerRadius": [
-            28,
-            28,
-            0,
-            0
+          "fill": "$glass-sheet",
+          "cornerRadius": 36,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 40
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#1D1D1D1F",
+              "offset": {
+                "x": 0,
+                "y": -4
+              },
+              "blur": 30
+            }
           ],
           "layout": "vertical",
           "gap": 20,
           "padding": [
             10,
             20,
-            40,
+            28,
             20
           ],
           "children": [
@@ -8326,8 +8818,9 @@
                   "name": "Icon",
                   "width": 18,
                   "height": 18,
-                  "icon": "triangle-alert",
-                  "library": "lucide",
+                  "icon": "warning-fill",
+                  "library": "phosphor",
+                  "weight": 500,
                   "fill": "$accent"
                 },
                 {
@@ -8381,8 +8874,9 @@
                           "name": "Mic",
                           "width": 18,
                           "height": 18,
-                          "icon": "mic",
-                          "library": "lucide",
+                          "icon": "microphone-fill",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "$accent"
                         }
                       ]
@@ -8432,7 +8926,7 @@
                       "name": "Play",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     },
@@ -8709,6 +9203,36 @@
       "layout": "vertical",
       "children": [
         {
+          "type": "ellipse",
+          "id": "krxrQ",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "xVCgc",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
           "id": "YcvmJ",
           "type": "ref",
           "ref": "PIuQK",
@@ -8941,6 +9465,36 @@
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "i31ANt",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "JdGcB",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
         {
           "id": "J8QYg",
           "type": "ref",
@@ -9211,8 +9765,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -9266,8 +9821,9 @@
                           "name": "Mic",
                           "width": 18,
                           "height": 18,
-                          "icon": "mic",
-                          "library": "lucide",
+                          "icon": "microphone-fill",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "$accent"
                         }
                       ]
@@ -9361,8 +9917,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -9451,8 +10008,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -9612,8 +10170,9 @@
                           "name": "Check",
                           "width": 15,
                           "height": 15,
-                          "icon": "check",
-                          "library": "lucide",
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
                           "fill": "#FFFFFF"
                         }
                       ]
@@ -9726,7 +10285,7 @@
                           "name": "Play",
                           "descendants": {
                             "azTBd": {
-                              "icon": "play"
+                              "icon": "play-fill"
                             }
                           }
                         },
@@ -10033,7 +10592,7 @@
                           "name": "Play",
                           "descendants": {
                             "azTBd": {
-                              "icon": "pause"
+                              "icon": "pause-fill"
                             }
                           }
                         },
@@ -10361,8 +10920,9 @@
                       "name": "Icon",
                       "width": 14,
                       "height": 14,
-                      "icon": "circle-check",
-                      "library": "lucide",
+                      "icon": "check-circle-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$success"
                     },
                     {
@@ -10401,28 +10961,88 @@
       "clip": true,
       "width": 390,
       "height": 844,
-      "fill": "#8F8A8B",
+      "fill": "$bg",
       "layout": "vertical",
+      "padding": [
+        0,
+        8,
+        8,
+        8
+      ],
       "justifyContent": "end",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "RfZVN",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "C9F70",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "nJiSb",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Scrim",
+          "fill": "$scrim",
+          "width": 390,
+          "height": 844
+        },
         {
           "type": "frame",
           "id": "yYMUj",
           "name": "Sheet",
           "width": "fill_container",
-          "fill": "$surface",
-          "cornerRadius": [
-            28,
-            28,
-            0,
-            0
+          "fill": "$glass-sheet",
+          "cornerRadius": 36,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 40
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#1D1D1D1F",
+              "offset": {
+                "x": 0,
+                "y": -4
+              },
+              "blur": 30
+            }
           ],
           "layout": "vertical",
           "gap": 20,
           "padding": [
             10,
             20,
-            40,
+            28,
             20
           ],
           "children": [
@@ -10477,7 +11097,7 @@
                   "name": "Done",
                   "descendants": {
                     "ovKos": {
-                      "icon": "check"
+                      "icon": "check-bold"
                     }
                   }
                 }
@@ -10604,7 +11224,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "pause"
+                          "icon": "pause-fill"
                         }
                       }
                     }
@@ -10693,7 +11313,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     }
@@ -10768,8 +11388,9 @@
                               "name": "Selected",
                               "width": 16,
                               "height": 16,
-                              "icon": "circle-check",
-                              "library": "lucide",
+                              "icon": "check-circle-fill",
+                              "library": "phosphor",
+                              "weight": 500,
                               "fill": "$accent"
                             }
                           ]
@@ -10792,7 +11413,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     }
@@ -10881,7 +11502,7 @@
                       "name": "Preview",
                       "descendants": {
                         "azTBd": {
-                          "icon": "play"
+                          "icon": "play-fill"
                         }
                       }
                     }
@@ -10907,6 +11528,36 @@
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "zUoPG",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "jKa34",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
         {
           "id": "SpupX",
           "type": "ref",
@@ -11078,8 +11729,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "mic",
-                      "library": "lucide",
+                      "icon": "microphone-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -11192,8 +11844,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "music",
-                      "library": "lucide",
+                      "icon": "file-audio-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -11306,8 +11959,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "mic",
-                      "library": "lucide",
+                      "icon": "microphone-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -11443,8 +12097,9 @@
                       "name": "Icon",
                       "width": 13,
                       "height": 13,
-                      "icon": "music",
-                      "library": "lucide",
+                      "icon": "file-audio-fill",
+                      "library": "phosphor",
+                      "weight": 500,
                       "fill": "$text-tertiary"
                     },
                     {
@@ -11821,6 +12476,74 @@
         },
         {
           "value": "#FFFFFF14",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "glass-sheet": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFFCC",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#1D1A1BCC",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "glow-a": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FF8C2240",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FF8C2230",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "glow-b": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F2708A2E",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#F2708A22",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "scrim": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#3B2E2A66",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#00000080",
           "theme": {
             "mode": "dark"
           }

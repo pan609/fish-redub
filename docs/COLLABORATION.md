@@ -60,10 +60,21 @@
 - `docs/DESIGN.md` v0.2；Pencil 设计稿 `design/fishRN.pen`（15 个画板），导出图在 `design/exports/`。
 - 审查说明：[reviews/phase2-review-brief.md](reviews/phase2-review-brief.md)
 
-### 2.2 Codex 审查（PM 使用 Codex 桌面端执行）
+### 2.2 PM 反馈（2026-10-26）
+
+- 交互设计大致满意。
+- 避免粗糙图标和 emoji 式图标。
+- 真正开发时融合 iOS 26 液态玻璃效果。
+
+处理（DESIGN v0.2 → v0.3）：
+1. 新增 §6 图标规范：界面禁用 emoji 和文字符号图标；用 `expo-symbols` 统一封装，iOS 用 SF Symbols、Android 用 Material Symbols；给出 19 个图标的双端映射表；设计稿图标从 Lucide 线条款换成接近 SF Symbols 的 Phosphor Fill/Bold。
+2. §7 液态玻璃方案从 2 项扩充为 7 个落地位置：NativeTabs 玻璃 Tab Bar（滚动最小化）、透明大标题导航栏、原生 formSheet 浮动玻璃弹层、可交互玻璃按钮（GlassView）、玻璃录音外圈、GlassContainer 融合按钮组；并补充页面暖色光晕背景，让玻璃有可折射的内容。全部带 `isLiquidGlassAvailable()` 降级方案。
+3. 设计稿 15 张全部重新导出（光晕背景、浮动玻璃弹层、玻璃圆形按钮、详情页玻璃返回键）。
+
+### 2.3 Codex 审查（PM 使用 Codex 桌面端执行）
 
 _待执行，结果保存到 `docs/reviews/phase2-design-codex.md`_
 
-### 2.3 处理结论
+### 2.4 处理结论
 
 _待填写_

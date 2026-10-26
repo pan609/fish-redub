@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 | v0.2（设计稿已完成，待 Codex 审查与 PM 确认） |
+| 版本 | v0.3（合入 PM 反馈：精致图标 + iOS 26 液态玻璃） |
 | 日期 | 2026-10-26 |
 | 依据 | [PRD.md](PRD.md) v1.0 |
 | 视觉参考 | 已上线的 Fish Audio iOS App（Hanabi AI Inc.，App Store id6789369290，v1.2.1） |
@@ -105,7 +105,7 @@
 | `PrimaryButton` | 高 52，胶囊，`primary` 底，`headline` 字 | 默认 / 按下（不透明度 0.85）/ 禁用（`surfaceMuted` 底 + `textTertiary` 字）/ 加载（左侧转圈 + 文案） |
 | `SecondaryButton` | 高 48，胶囊，`surfaceMuted` 底 | 默认 / 按下 / 禁用 |
 | `TextButton` | `accent` 色文字，无底 | "更换"、"编辑"、"恢复原文" |
-| `IconButton` | 40 圆形，`surfaceMuted` 底 | 弹层 ✕、✓ |
+| `IconButton` | 40 圆形；iOS 26 为玻璃材质，其他为 `surfaceMuted` 底 | 弹层关闭（`xmark`）、确认（`checkmark`）、详情页返回 |
 | `RecordButton` | 72 圆形，`accentGradient`，白色麦克风图标；录音中变为白底橙色方块（停止） | 待录 / 录音中 / 禁用 |
 | `PlayButton` | 40 圆形，`primary` 底，白色图标 | 播放 / 暂停 / 加载 / 不可用 |
 | `Waveform` | 竖条宽 3、间距 2、圆头；高度来自电平采样或固定伪随机序列 | 静止 / 播放进度（左段 `waveActive`）/ 录音中（`accentGradient`） |
@@ -115,16 +115,15 @@
 | `LangTag` | 胶囊，`surfaceMuted` 底 | "中文"、"英文" |
 | `InlineAlert` | `dangerSoft` 底，圆角 12，图标 + 文案 + 右侧按钮（"重试" / "去设置"） | 错误 / 警告（`accentSoft` 底） |
 | `VoiceAvatar` | 圆形头像，48（列表）/ 32（摘要）/ 24（卡片角标） | 选中时外圈 2pt `primary` 描边 |
-| `BottomSheet` | `surface` 底，顶部圆角 28；头部：左 ✕、中左标题、右 ✓（可选）；顶部抓手 | — |
+| `BottomSheet` | 系统原生 formSheet（见 §6）；头部：左关闭按钮、标题居左、右确认按钮（可选）；顶部抓手 | — |
 
 ## 5. 页面设计
 
 ### 5.1 全局框架
 
 - 底部双 Tab：**配音**（波形图标）、**历史**（时钟图标）。
-- **iOS 26**：使用系统原生 Tab Bar（`expo-router` 的 Native Tabs），自动获得液态玻璃效果；页面内容延伸到 Tab Bar 下方，形成透光效果。
-- **其他系统（iOS 26 以下、Android）**：自定义 Tab Bar，`surface` 底 + 顶部 `border` 分隔线；Android 遵循系统手势导航留白。
-- 页面头部：左侧大标题（`display`），配音页标题左侧放 Fish 风格的竖条波形标志。
+- 双端都使用 `NativeTabs`（系统原生 Tab Bar）：iOS 26 为液态玻璃，iOS 旧版为系统毛玻璃，Android 为 Material 3 底部导航。页面内容延伸到 Tab Bar 下方，形成透光效果。详见 §7。
+- 页面头部：大标题由原生导航栏绘制（iOS `headerLargeTitle`，滚动后收起为玻璃导航栏）；配音页导航栏左侧放 Fish 风格的竖条波形品牌标志（矩形竖条组成，不使用图片或 emoji）。Android 使用同样字号的自绘标题。
 
 ### 5.2 配音页（主页面）
 
@@ -134,8 +133,8 @@
 │ ●━━━━○━━━━○━━━━○              │  步骤进度条：音频 · 文字 · 声音 · 配音
 │                              │
 │ ┌ ① 音频 ───────── ✓ 已就绪 ┐ │
-│ │ 🎙 录音 2026-10-26 14:03   │ │  音源摘要
-│ │ ▶ ıllıılıılı  00:04/00:12 │ │
+│ │ [mic] 录音 2026-10-26 14:03│ │  音源摘要（[xxx] 表示图标）
+│ │ [play] ıllıılıılı 00:04/12│ │
 │ │ 录音 · 0.2 MB        更换 │ │
 │ └──────────────────────────┘ │
 │ ┌ ② 文字 ──────── 待确认 ───┐ │
@@ -151,7 +150,7 @@
 │ ┌ ④ 配音 ──────────────────┐ │
 │ └──────────────────────────┘ │
 ├──────────────────────────────┤
-│      🔊 配音        🕘 历史    │  Tab Bar（iOS 26 液态玻璃）
+│   [waveform] 配音  [clock] 历史 │  Tab Bar（iOS 26 液态玻璃）
 └──────────────────────────────┘
 ```
 
@@ -159,7 +158,7 @@
 
 | 步骤 | 状态 | 卡片内容 | 主操作 |
 |---|---|---|---|
-| ① 音频 | 空 | 两个等宽大按钮：`🎙 录音`（橙色渐变图标）、`📁 导入文件`；下方说明"1–60 秒 · MP3 / WAV / M4A · 不超过 10 MB" | — |
+| ① 音频 | 空 | 两个等宽大按钮：录音（`mic.fill`，橙色渐变圆底）、导入文件（`folder.fill`，黑色圆底）；下方说明"1–60 秒 · MP3 / WAV / M4A · 不超过 10 MB" | — |
 | | 导入中 | 骨架 + "正在读取文件…" | — |
 | | 校验失败 | `InlineAlert`：具体原因（PRD I3 文案）+ "重新选择" | — |
 | | 已就绪 | 音源摘要：来源图标 + 名称 + `AudioPlayer` + "录音 / 导入 · 大小" + "更换"（弹出菜单：录音 / 导入） | — |
@@ -190,11 +189,11 @@
 │ (头像) 解说男声       14:05   │
 │ 你好，这是一段重新配音的测试…   │  实际配音文字，最多 3 行
 │                              │
-│ 原音   ▶ ıllıılıılıı 00:12   │  AudioPlayer × 2
-│ 新配音 ▶ ıllıılıılıı 00:09   │  播放中的那一行波形填充前景色
+│ 原音   [play] ıllıılıılı 00:12│  AudioPlayer × 2
+│ 新配音 [play] ıllıılıılı 00:09│  播放中的那一行波形填充前景色
 │                              │
 │ ( 分享 )        ( 导出 )      │  两个次按钮，等宽
-│ ✓ 已保存到历史                │  caption，success 色
+│ [checkmark.circle] 已保存到历史 │  caption，success 色
 └──────────────────────────────┘
 ```
 
@@ -210,11 +209,11 @@
 | 自动结束 / 后台结束 | 预览状态顶部加提示条："已达到 60 秒上限，录音已自动结束" / "录音已在切到后台时结束" |
 | 无效 | 警告条"录音过短，请至少录制 1 秒" / "录音未能保存，请重新录制" + 主按钮"重新录音" |
 
-录音中禁止下滑关闭弹层，避免误触；点 ✕ 会弹出确认"放弃本次录音？"。
+录音中禁止下滑关闭弹层，避免误触；点关闭按钮会弹出确认"放弃本次录音？"。
 
 ### 5.5 声音选择弹层
 
-- 头部：✕、标题"选择声音"、✓（确认并关闭）。
+- 头部：关闭按钮、标题"选择声音"、确认按钮（确认并关闭）。
 - 列表：每行 = `VoiceAvatar 48` + 名称 + 语言标签 + 一行简介 + 右侧 `PlayButton`（试听）。试听中该行显示一条细进度条。
 - 选中行：浅 `accentSoft` 底 + 右侧对勾，头像外圈描边。
 - 顶部提示一行 `caption`："所有声音都支持中英文，标签表示样例语言"。
@@ -231,12 +230,12 @@
 
 ```
 ┌──────────────────────────────┐
-│ ‹ 历史                        │
+│ (玻璃返回按钮)                 │
 │ (头像) 解说男声                │
 │ 2026-10-26 14:05              │
 │                              │
-│ 原音   ▶ ıllıılıılıı 00:12   │
-│ 新配音 ▶ ıllıılıılıı 00:09   │
+│ 原音   [play] ıllıılıılı 00:12│
+│ 新配音 [play] ıllıılıılı 00:09│
 │                              │
 │ 原始转写                       │
 │ 你好这是一段重新配音的测式。      │
@@ -260,16 +259,73 @@
 | 删除确认、放弃录音 | 系统原生确认框 |
 | 离线 | 页面顶部细条"网络不可用"，网络恢复后自动消失 |
 
-## 6. 液态玻璃（iOS 26）方案
+## 6. 图标规范
 
-| 位置 | iOS 26 | iOS 26 以下 / Android |
+> PM 反馈（2026-10-26）：避免粗糙图标和 emoji 式图标。
+
+### 6.1 规则
+
+1. **界面中禁止使用 emoji，也不用文字符号代替图标**（如 ✕ ✓ ‹ ▶ ★）。所有图标都走统一的 `<Icon>` 组件。
+2. **使用各平台的原生图标体系**，通过 `expo-symbols`（SDK 58，`SymbolView` 同时支持 iOS 与 Android）实现：
+   - iOS：**SF Symbols**，默认字重 `semibold`，渲染模式 `hierarchical` 或 `monochrome`。
+   - Android：**Material Symbols Rounded**（`expo-symbols` 的 `android` 名称），字重 500。
+3. 动作类图标优先用**填充款**（`play.fill`、`mic.fill`），导航和工具类用线条款（`xmark`、`chevron.left`），同一区域内不混用。
+4. 尺寸只用三档：**17**（行内、标签）· **20**（按钮内）· **24**（Tab、空状态）；图标颜色只取文字或强调色令牌，不单独定色。
+5. 系统动效：录音中的 `waveform` 使用 SF Symbols 的 `variableColor` 动画；保存成功使用 `bounce`（只在 iOS 上，开启"减弱动态效果"时关闭）。
+6. 设计稿中用 Phosphor Fill / Bold 近似 SF Symbols 的视觉；开发时以下表的系统符号为准。
+
+### 6.2 图标映射表
+
+| 用途 | iOS（SF Symbols） | Android（Material Symbols） |
 |---|---|---|
-| 底部 Tab Bar | 系统原生 Tab Bar，自动为液态玻璃 | 自定义不透明 Tab Bar |
-| 弹层头部 ✕ / ✓ 按钮 | 玻璃圆形按钮 | `surfaceMuted` 圆形按钮 |
+| Tab：配音 | `waveform` | `graphic_eq` |
+| Tab：历史 | `clock.arrow.circlepath` | `history` |
+| 录音 / 麦克风 | `mic.fill` | `mic` |
+| 停止录音 | `stop.fill` | `stop` |
+| 麦克风权限关闭 | `mic.slash.fill` | `mic_off` |
+| 导入文件 | `folder.fill` | `folder_open` |
+| 导入来源（文件） | `doc.fill` | `audio_file` |
+| 播放 / 暂停 | `play.fill` / `pause.fill` | `play_arrow` / `pause` |
+| 关闭 / 确认 | `xmark` / `checkmark` | `close` / `check` |
+| 返回 | `chevron.left` | `arrow_back` |
+| 恢复原文 | `arrow.uturn.backward` | `undo` |
+| 分享 | `square.and.arrow.up` | `share` |
+| 导出 | `square.and.arrow.down` | `download` |
+| 删除 | `trash` | `delete` |
+| 已完成 / 成功 | `checkmark.circle.fill` | `check_circle` |
+| 错误 | `exclamationmark.circle.fill` | `error` |
+| 警告 / 空结果 | `exclamationmark.triangle.fill` | `warning` |
+| 离线 | `wifi.slash` | `wifi_off` |
+| 已编辑 | `pencil` | `edit` |
 
-原则：玻璃只用于"浮在内容之上"的控件，内容卡片保持实色，确保文字可读；不做自定义模糊模拟。
+## 7. 液态玻璃（iOS 26）方案
 
-## 7. 设计稿清单
+> PM 要求（2026-10-26）：真正开发时融合 iOS 26 液态玻璃效果。
+
+### 7.1 原则
+
+- **玻璃只用于浮在内容之上的控件层**（导航栏、Tab Bar、弹层、浮动按钮）。内容层（步骤卡片、文本、列表）保持实色，保证可读性。这与 Apple HIG 对 Liquid Glass 的要求一致。
+- **优先使用系统原生组件**，让系统负责折射、高光、形变和无障碍（"降低透明度"设置开启后系统自动降级）。不用模糊加半透明去模拟玻璃。
+- **给玻璃可以折射的背景**：页面底色上加两团柔和的暖色光晕（右上橙色、左下粉色，高斯模糊），来自 Fish Audio 商店图的橙色光晕元素，内容滚过玻璃控件时能看到折射。
+- 运行时用 `isLiquidGlassAvailable()`（`expo-glass-effect`）判断；不可用时走"降级"列。
+
+### 7.2 落地位置
+
+| 位置 | iOS 26（液态玻璃） | 实现方式 | 降级：iOS 25 及以下 / Android |
+|---|---|---|---|
+| 底部 Tab Bar | 系统液态玻璃 Tab Bar，向下滚动时最小化 | `expo-router/unstable-native-tabs` 的 `NativeTabs`，`minimizeBehavior="onScrollDown"` | iOS 旧版：系统毛玻璃 Tab Bar；Android：Material 3 底部导航（同一个 `NativeTabs`） |
+| 页面导航栏 | 透明大标题导航栏，滚动后标题收起，导航栏变为玻璃 | Stack `headerLargeTitle` + `headerTransparent` | iOS 旧版：系统模糊导航栏；Android：实色顶栏 |
+| 历史详情返回、工具按钮 | 玻璃圆形按钮 | 原生导航栏按钮（iOS 26 自动为玻璃） | 普通图标按钮 |
+| 录音弹层、声音选择弹层 | 浮动玻璃弹层：中等高度时四周留边、大圆角；拉到全屏时贴边 | 原生 `formSheet`（`sheetAllowedDetents`、`sheetGrabberVisible`），不设背景色，由系统绘制玻璃 | iOS 旧版：系统弹层；Android：Material 底部弹层 |
+| 弹层头部关闭 / 确认按钮 | 可交互玻璃圆形按钮（按下有形变反馈） | `GlassView isInteractive` | `surfaceMuted` 圆形按钮 |
+| 录音按钮外圈 | 橙色着色玻璃圆环，录音时呼吸 | `GlassView tintColor=accent` 包裹渐变按钮 | 半透明橙色圆环 |
+| 结果区"分享 / 导出" | 一组玻璃胶囊按钮，相邻按钮靠近时融合 | `GlassContainer spacing` + 两个 `GlassView isInteractive` | 暖灰胶囊次按钮 |
+
+### 7.3 不使用玻璃的位置
+
+步骤卡片、文本输入框、历史卡片、播放器波形、错误提示条：保持实色，避免玻璃叠玻璃和文字可读性问题。
+
+## 8. 设计稿清单
 
 | # | 文件 | 页面 / 状态 | 对应 PRD |
 |---|---|---|---|
@@ -289,21 +345,21 @@
 
 未单独出图、按规范实现的状态：导入读取中、转写中骨架、生成失败（同 08 的错误条样式）、结果已过期、录音过短、文件不可用、离线顶部条。
 
-## 8. 文案规范
+## 9. 文案规范
 
 - 语气：简短、直接、说明原因和下一步；不用"出错了""未知错误"之类的空泛表述。
 - 按钮用动词：录音、导入文件、确认文字、生成配音、重新生成、分享、导出、重试。
 - 数字与单位之间不加空格：`10MB`、`60 秒`（中文单位保留空格）。
 - 错误文案以 PRD 7.1 为准，页面内不重复造词。
 
-## 9. 无障碍
+## 10. 无障碍
 
 - 所有图标按钮有 `accessibilityLabel`（如"播放原音"、"暂停新配音"、"试听 Sarah"）。
 - 播放进度条设置 `accessibilityRole="adjustable"`，读出"已播放 4 秒，共 12 秒"。
 - 步骤卡片读出状态："第二步，文字，待确认"。
 - 录音计时每 10 秒播报一次剩余时间（仅读屏开启时）。
 
-## 10. testID 命名约定（供 Maestro 使用）
+## 11. testID 命名约定（供 Maestro 使用）
 
 格式：`<区域>.<元素>`，例如：
 
@@ -318,7 +374,7 @@
 | `history.item.<index>` / `history.detail.delete` | 历史 |
 | `alert.<code>` | 错误条，例如 `alert.network`、`alert.auth` |
 
-## 11. 预置声音视觉资源
+## 12. 预置声音视觉资源
 
 | 声音 | 头像 | 试听音频 |
 |---|---|---|
