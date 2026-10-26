@@ -6,8 +6,8 @@
 
 | # | 阶段 | 产出文档 | 状态 |
 |---|---|---|---|
-| 1 | 产品设计 | [PRD.md](PRD.md) | ✅ v1.0 定稿 |
-| 2 | UI 设计 | DESIGN.md、设计稿 | 🟡 v0.3（图标规范 + 液态玻璃）+ 15 张设计稿，待 PM 用 Codex 审查 |
+| 1 | 产品设计 | [PRD.md](PRD.md) | ✅ v1.1（阶段二补充取消规则与声音选择） |
+| 2 | UI 设计 | DESIGN.md、设计稿 | 🟡 v0.4 + 16 张设计稿，Codex 审查 7 条已全部处理，待 PM 确认通过 |
 | 3 | 编码 | PLAN.md、源码 | ⬜ 未开始 |
 | 4 | 测试评测 | TEST_REPORT.md | ⬜ 未开始 |
 | 5 | 优化 | OPTIMIZATION.md | ⬜ 未开始 |
@@ -50,3 +50,4 @@
 | 2026-10-26 | PM 裁决 D1–D7 全选 A；PRD v1.0 定稿；进入阶段二 UI 设计（参考 Fish Audio App 风格） |
 | 2026-10-26 | 调研 Fish Audio App（App Store 截图取色）；DESIGN v0.1 → v0.2；Pencil 设计稿 15 张（`design/exports/`）；审查说明 `docs/reviews/phase2-review-brief.md` |
 | 2026-10-26 | PM 反馈：去掉粗糙/emoji 图标、开发融合 iOS 26 液态玻璃 → DESIGN v0.3（§6 图标规范、§7 液态玻璃 7 处落地），设计稿重新导出 |
+| 2026-10-26 | 处理阶段二 Codex 审查 7 条（全部采纳）：对比度令牌重算、取消不自动重发、声音选择即生效、适配约定、新增 16 号图稿；DESIGN v0.4、PRD v1.1 |

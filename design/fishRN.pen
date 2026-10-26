@@ -298,7 +298,7 @@
                       "type": "text",
                       "id": "zEp6S",
                       "name": "Label",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "配音",
                       "fontFamily": "$font",
                       "fontSize": 10,
@@ -576,7 +576,7 @@
                       "type": "text",
                       "id": "uuSP8",
                       "name": "文字",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "文字",
@@ -681,7 +681,7 @@
                       "type": "text",
                       "id": "itIDR",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已就绪",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -754,7 +754,7 @@
                       "type": "text",
                       "id": "P0hxbV",
                       "name": "Change",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "更换",
                       "fontFamily": "$font",
                       "fontSize": 14,
@@ -1103,7 +1103,7 @@
                           "type": "text",
                           "id": "X1B4c",
                           "name": "Num",
-                          "fill": "#FFFFFF",
+                          "fill": "#1D1D1D",
                           "content": "2",
                           "fontFamily": "Inter",
                           "fontSize": 13,
@@ -1127,7 +1127,7 @@
                       "type": "text",
                       "id": "gBmJl",
                       "name": "Status",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "待确认",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -1171,7 +1171,7 @@
                           "type": "text",
                           "id": "Lx4mp",
                           "name": "Label",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "恢复原文",
                           "fontFamily": "$font",
                           "fontSize": 14,
@@ -1231,7 +1231,6 @@
               "type": "frame",
               "id": "Eg1Ec",
               "name": "Step 3 声音",
-              "opacity": 0.45,
               "width": "fill_container",
               "fill": "$surface",
               "cornerRadius": 20,
@@ -1284,7 +1283,7 @@
                       "type": "text",
                       "id": "m5do2",
                       "name": "Title",
-                      "fill": "$text-primary",
+                      "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "声音",
@@ -1310,7 +1309,6 @@
               "type": "frame",
               "id": "l4qlDv",
               "name": "Step 4 配音",
-              "opacity": 0.45,
               "width": "fill_container",
               "fill": "$surface",
               "cornerRadius": 20,
@@ -1363,7 +1361,7 @@
                       "type": "text",
                       "id": "jfsSm",
                       "name": "Title",
-                      "fill": "$text-primary",
+                      "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "配音",
@@ -1729,7 +1727,7 @@
                       "type": "text",
                       "id": "EaRIH",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已就绪",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -1802,7 +1800,7 @@
                       "type": "text",
                       "id": "qSR83",
                       "name": "Change",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "更换",
                       "fontFamily": "$font",
                       "fontSize": 14,
@@ -1881,11 +1879,21 @@
                       "type": "text",
                       "id": "NmDjR",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已确认",
                       "fontFamily": "$font",
                       "fontSize": 12,
                       "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "NKISu",
+                      "name": "Edit",
+                      "fill": "$accent-text",
+                      "content": "编辑",
+                      "fontFamily": "$font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
                     }
                   ]
                 },
@@ -1972,7 +1980,7 @@
                       "type": "text",
                       "id": "NNydC",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "Sarah",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -2055,7 +2063,7 @@
                       "type": "text",
                       "id": "un5zu",
                       "name": "Change",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "更换",
                       "fontFamily": "$font",
                       "fontSize": 14,
@@ -2134,7 +2142,7 @@
                       "type": "text",
                       "id": "XQ6TU",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已完成",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -2198,6 +2206,18 @@
                           "fontWeight": "500"
                         }
                       ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "sHGkq",
+                      "name": "Snapshot",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "大家好，今天想和你们分享一个关于声音的小故事。每一个声音都有自己的温度。",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
                     },
                     {
                       "type": "frame",
@@ -2870,7 +2890,7 @@
                       "type": "text",
                       "id": "KkTGE",
                       "name": "Label",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已保存到历史",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -4227,12 +4247,6 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "n3WJD",
-                  "type": "ref",
-                  "ref": "KY3Qx",
-                  "name": "Close"
-                },
-                {
                   "type": "text",
                   "id": "cYTXR",
                   "name": "Title",
@@ -4262,7 +4276,10 @@
               "id": "qiLu8",
               "name": "Tip",
               "fill": "$text-tertiary",
-              "content": "所有声音都支持中英文，标签表示样例语言",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "点击即选中，关闭后保持当前选择。所有声音都支持中英文，标签表示样例语言",
+              "lineHeight": 1.4,
               "fontFamily": "$font",
               "fontSize": 12
             },
@@ -4343,7 +4360,7 @@
                           "type": "text",
                           "id": "ecBJY",
                           "name": "Desc",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "试听中 00:06 / 00:14",
                           "fontFamily": "$font",
                           "fontSize": 12,
@@ -4828,7 +4845,7 @@
                           "type": "text",
                           "id": "X8868",
                           "name": "Label",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "已编辑",
                           "fontFamily": "$font",
                           "fontSize": 11,
@@ -5196,7 +5213,7 @@
                           "type": "text",
                           "id": "Duasc",
                           "name": "Label",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "已编辑",
                           "fontFamily": "$font",
                           "fontSize": 11,
@@ -6152,7 +6169,7 @@
                               "type": "text",
                               "id": "DSKUW",
                               "name": "Label",
-                              "fill": "$accent",
+                              "fill": "$accent-text",
                               "content": "已编辑",
                               "fontFamily": "$font",
                               "fontSize": 11,
@@ -6445,7 +6462,7 @@
                       "type": "text",
                       "id": "WBHvR",
                       "name": "音频",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "音频",
@@ -6537,7 +6554,7 @@
                           "type": "text",
                           "id": "IvENT",
                           "name": "Num",
-                          "fill": "#FFFFFF",
+                          "fill": "#1D1D1D",
                           "content": "1",
                           "fontFamily": "Inter",
                           "fontSize": 13,
@@ -6561,7 +6578,7 @@
                       "type": "text",
                       "id": "NBbV9",
                       "name": "Status",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "添加一段语音",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -6713,7 +6730,6 @@
               "type": "frame",
               "id": "JjMNt",
               "name": "Step 2 文字",
-              "opacity": 0.45,
               "width": "fill_container",
               "fill": "$surface",
               "cornerRadius": 20,
@@ -6766,7 +6782,7 @@
                       "type": "text",
                       "id": "ewUeg",
                       "name": "Title",
-                      "fill": "$text-primary",
+                      "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "文字",
@@ -6792,7 +6808,6 @@
               "type": "frame",
               "id": "gbCLS",
               "name": "Step 3 声音",
-              "opacity": 0.45,
               "width": "fill_container",
               "fill": "$surface",
               "cornerRadius": 20,
@@ -6845,7 +6860,7 @@
                       "type": "text",
                       "id": "E9D6jJ",
                       "name": "Title",
-                      "fill": "$text-primary",
+                      "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "声音",
@@ -6871,7 +6886,6 @@
               "type": "frame",
               "id": "r64tau",
               "name": "Step 4 配音",
-              "opacity": 0.45,
               "width": "fill_container",
               "fill": "$surface",
               "cornerRadius": 20,
@@ -6924,7 +6938,7 @@
                       "type": "text",
                       "id": "b8uSkI",
                       "name": "Title",
-                      "fill": "$text-primary",
+                      "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "配音",
@@ -7185,7 +7199,7 @@
                       "type": "text",
                       "id": "CFl6Z",
                       "name": "文字",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "文字",
@@ -7290,7 +7304,7 @@
                       "type": "text",
                       "id": "xD1Mc",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已就绪",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -7363,7 +7377,7 @@
                       "type": "text",
                       "id": "Us8xT",
                       "name": "Change",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "更换",
                       "fontFamily": "$font",
                       "fontSize": 14,
@@ -7417,7 +7431,7 @@
                           "type": "text",
                           "id": "L4b75",
                           "name": "Num",
-                          "fill": "#FFFFFF",
+                          "fill": "#1D1D1D",
                           "content": "2",
                           "fontFamily": "Inter",
                           "fontSize": 13,
@@ -7441,7 +7455,7 @@
                       "type": "text",
                       "id": "tM4Ru",
                       "name": "Status",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "未识别",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -7966,7 +7980,7 @@
                       "type": "text",
                       "id": "akxnf",
                       "name": "配音",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "配音",
@@ -8048,7 +8062,7 @@
                       "type": "text",
                       "id": "dOUVw",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已就绪",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -8128,7 +8142,7 @@
                       "type": "text",
                       "id": "g3PRzI",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已确认",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -8208,7 +8222,7 @@
                       "type": "text",
                       "id": "AaTzy",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "Sarah",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -8262,7 +8276,7 @@
                           "type": "text",
                           "id": "lL2IF",
                           "name": "Num",
-                          "fill": "#FFFFFF",
+                          "fill": "#1D1D1D",
                           "content": "4",
                           "fontFamily": "Inter",
                           "fontSize": 13,
@@ -8286,7 +8300,7 @@
                       "type": "text",
                       "id": "EbAGo",
                       "name": "Status",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "生成中",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -8399,7 +8413,7 @@
                       "type": "text",
                       "id": "VaQg0",
                       "name": "Cancel",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "取消",
                       "fontFamily": "$font",
                       "fontSize": 15,
@@ -9788,7 +9802,7 @@
                       "type": "text",
                       "id": "LkBuZ",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已就绪",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -9861,7 +9875,7 @@
                       "type": "text",
                       "id": "cWPlC",
                       "name": "Change",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "更换",
                       "fontFamily": "$font",
                       "fontSize": 14,
@@ -9940,11 +9954,21 @@
                       "type": "text",
                       "id": "Pz74Q",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已确认",
                       "fontFamily": "$font",
                       "fontSize": 12,
                       "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "S0Dvk",
+                      "name": "Edit",
+                      "fill": "$accent-text",
+                      "content": "编辑",
+                      "fontFamily": "$font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
                     }
                   ]
                 },
@@ -10031,7 +10055,7 @@
                       "type": "text",
                       "id": "H77I5R",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "Sarah",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -10114,7 +10138,7 @@
                       "type": "text",
                       "id": "x1OgT",
                       "name": "Change",
-                      "fill": "$accent",
+                      "fill": "$accent-text",
                       "content": "更换",
                       "fontFamily": "$font",
                       "fontSize": 14,
@@ -10193,7 +10217,7 @@
                       "type": "text",
                       "id": "A3LNv",
                       "name": "Status",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已完成",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -10257,6 +10281,18 @@
                           "fontWeight": "500"
                         }
                       ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "O3OYT",
+                      "name": "Snapshot",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "大家好，今天想和你们分享一个关于声音的小故事。每一个声音都有自己的温度。",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
                     },
                     {
                       "type": "frame",
@@ -10929,7 +10965,7 @@
                       "type": "text",
                       "id": "Jq8EB",
                       "name": "Label",
-                      "fill": "$success",
+                      "fill": "$success-text",
                       "content": "已保存到历史",
                       "fontFamily": "$font",
                       "fontSize": 12,
@@ -11073,12 +11109,6 @@
               "alignItems": "center",
               "children": [
                 {
-                  "id": "AbSCU",
-                  "type": "ref",
-                  "ref": "KY3Qx",
-                  "name": "Close"
-                },
-                {
                   "type": "text",
                   "id": "kmOBe",
                   "name": "Title",
@@ -11108,7 +11138,10 @@
               "id": "gkUWo",
               "name": "Tip",
               "fill": "$text-tertiary",
-              "content": "所有声音都支持中英文，标签表示样例语言",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "点击即选中，关闭后保持当前选择。所有声音都支持中英文，标签表示样例语言",
+              "lineHeight": 1.4,
               "fontFamily": "$font",
               "fontSize": 12
             },
@@ -11189,7 +11222,7 @@
                           "type": "text",
                           "id": "Yc5ne",
                           "name": "Desc",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "试听中 00:06 / 00:14",
                           "fontFamily": "$font",
                           "fontSize": 12,
@@ -11677,7 +11710,7 @@
                           "type": "text",
                           "id": "DtY1G",
                           "name": "Label",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "已编辑",
                           "fontFamily": "$font",
                           "fontSize": 11,
@@ -12045,7 +12078,7 @@
                           "type": "text",
                           "id": "fD2RO",
                           "name": "Label",
-                          "fill": "$accent",
+                          "fill": "$accent-text",
                           "content": "已编辑",
                           "fontFamily": "$font",
                           "fontSize": 11,
@@ -12144,6 +12177,1575 @@
               "fontWeight": "600"
             }
           }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "UKwAN",
+      "x": 1410,
+      "y": 2000,
+      "name": "配音 · 结果已过期",
+      "clip": true,
+      "width": 390,
+      "fill": "$bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "ellipse",
+          "id": "P7kcz",
+          "layoutPosition": "absolute",
+          "x": 170,
+          "y": -120,
+          "name": "Glow A",
+          "fill": "$glow-a",
+          "width": 340,
+          "height": 340,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "Mxgu7",
+          "layoutPosition": "absolute",
+          "x": -160,
+          "y": 460,
+          "name": "Glow B",
+          "fill": "$glow-b",
+          "width": 320,
+          "height": 320,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "id": "YpVdZ",
+          "type": "ref",
+          "ref": "PIuQK",
+          "name": "Status Bar"
+        },
+        {
+          "type": "frame",
+          "id": "ndyah",
+          "name": "Content",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "padding": [
+            4,
+            20,
+            16,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "f38CLy",
+              "name": "Header",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "e0nDx",
+                  "name": "Logo",
+                  "gap": 2,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "FBVqp",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 8
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "XWt1Q",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 14
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "y0yXtW",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 20
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "kP2gR",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 12
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "S8ckDH",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 22
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "OKe6Z",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 16
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "lwT7E",
+                      "name": "Bar",
+                      "fill": "$accent",
+                      "width": 3,
+                      "height": 10
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "WNrNf",
+                  "name": "Title",
+                  "fill": "$text-primary",
+                  "content": "配音",
+                  "fontFamily": "$font",
+                  "fontSize": 34,
+                  "fontWeight": "800"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "DYPW6",
+              "name": "Stepper",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "nW58a",
+                  "name": "Bars",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "qH8gt",
+                      "name": "Seg",
+                      "fill": "$text-primary",
+                      "width": "fill_container",
+                      "height": 4
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "hW5Ei",
+                      "name": "Seg",
+                      "fill": "$text-primary",
+                      "width": "fill_container",
+                      "height": 4
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "GPl2w",
+                      "name": "Seg",
+                      "fill": "$text-primary",
+                      "width": "fill_container",
+                      "height": 4
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "m6xioD",
+                      "name": "Seg",
+                      "fill": "$text-primary",
+                      "width": "fill_container",
+                      "height": 4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZzXXR",
+                  "name": "Labels",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "V0NMf",
+                      "name": "音频",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "音频",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "sbiWs",
+                      "name": "文字",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "文字",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "J6CLQ",
+                      "name": "声音",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "声音",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "XsKjB",
+                      "name": "配音",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "配音",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TCojm",
+              "name": "Step 1 音频",
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": 20,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#1D1D1D0A",
+                "offset": {
+                  "x": 0,
+                  "y": 2
+                },
+                "blur": 12
+              },
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YyBRT",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "slMyF",
+                      "name": "Badge",
+                      "width": 26,
+                      "height": 26,
+                      "fill": "$success",
+                      "cornerRadius": 999,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "o0q25U",
+                          "name": "Check",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "VzYP5",
+                      "name": "Title",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "音频",
+                      "fontFamily": "$font",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "DZaTT",
+                      "name": "Status",
+                      "fill": "$success-text",
+                      "content": "已就绪",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "xOplY",
+                  "name": "Source",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "INAXm",
+                      "name": "Src Icon",
+                      "width": 36,
+                      "height": 36,
+                      "fill": "$accent-soft",
+                      "cornerRadius": 12,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "GWGn1",
+                          "name": "Mic",
+                          "width": 18,
+                          "height": 18,
+                          "icon": "microphone-fill",
+                          "library": "phosphor",
+                          "weight": 500,
+                          "fill": "$accent"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ypzvD",
+                      "name": "Meta",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "I6WMW0",
+                          "name": "Name",
+                          "fill": "$text-primary",
+                          "content": "录音 2026-10-26 14:03",
+                          "fontFamily": "$font",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "U6A9L",
+                          "name": "Info",
+                          "fill": "$text-tertiary",
+                          "content": "录音 · 00:12 · 0.2MB",
+                          "fontFamily": "$font",
+                          "fontSize": 12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "deeyK",
+                      "name": "Change",
+                      "fill": "$accent-text",
+                      "content": "更换",
+                      "fontFamily": "$font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Xfh4r",
+              "name": "Step 2 文字",
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": 20,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#1D1D1D0A",
+                "offset": {
+                  "x": 0,
+                  "y": 2
+                },
+                "blur": 12
+              },
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qyzHF",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "C9mJD",
+                      "name": "Badge",
+                      "width": 26,
+                      "height": 26,
+                      "fill": "$success",
+                      "cornerRadius": 999,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "CkQPz",
+                          "name": "Check",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Zm8di",
+                      "name": "Title",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "文字",
+                      "fontFamily": "$font",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "wRVjI",
+                      "name": "Status",
+                      "fill": "$accent-text",
+                      "content": "已修改",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "MPABM",
+                      "name": "Edit",
+                      "fill": "$accent-text",
+                      "content": "编辑",
+                      "fontFamily": "$font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "RgX51",
+                  "name": "Text",
+                  "fill": "$text-secondary",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "大家好，今天想和你们分享一个关于声音的小故事。希望你也能听见声音里的温度。",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font",
+                  "fontSize": 15
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "A9Axy",
+              "name": "Step 3 声音",
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": 20,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#1D1D1D0A",
+                "offset": {
+                  "x": 0,
+                  "y": 2
+                },
+                "blur": 12
+              },
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "cLPuz",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lsid7",
+                      "name": "Badge",
+                      "width": 26,
+                      "height": 26,
+                      "fill": "$success",
+                      "cornerRadius": 999,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "eTGdx",
+                          "name": "Check",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "check-bold",
+                          "library": "phosphor",
+                          "weight": 500,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "igbH7",
+                      "name": "Title",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "声音",
+                      "fontFamily": "$font",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "GZKFG",
+                      "name": "Status",
+                      "fill": "$success-text",
+                      "content": "Sarah",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "y7klR",
+                  "name": "Voice Row",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "NmSAs",
+                      "name": "Avatar",
+                      "width": 40,
+                      "height": 40,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "voice3.png",
+                        "mode": "cover"
+                      },
+                      "cornerRadius": 999
+                    },
+                    {
+                      "type": "frame",
+                      "id": "XymlD",
+                      "name": "Meta",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "X2z7b",
+                          "name": "Line",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "zxFZi",
+                              "name": "Name",
+                              "fill": "$text-primary",
+                              "content": "Sarah",
+                              "fontFamily": "$font",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "id": "SAnea",
+                              "type": "ref",
+                              "ref": "g5EgO",
+                              "name": "Lang",
+                              "descendants": {
+                                "hKFB1": {
+                                  "content": "英文"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "g7GWaq",
+                          "name": "Desc",
+                          "fill": "$text-tertiary",
+                          "content": "投入、自然的女声",
+                          "fontFamily": "$font",
+                          "fontSize": 12
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "kdtPY",
+                      "name": "Change",
+                      "fill": "$accent-text",
+                      "content": "更换",
+                      "fontFamily": "$font",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "v08jQ",
+              "name": "Step 4 配音",
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": 20,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#1D1D1D0A",
+                "offset": {
+                  "x": 0,
+                  "y": 2
+                },
+                "blur": 12
+              },
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "z0rxyp",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "gGezD",
+                      "name": "Badge",
+                      "width": 26,
+                      "height": 26,
+                      "fill": "$text-tertiary",
+                      "cornerRadius": 999,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "SsfuF",
+                          "name": "Check",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "clock-counter-clockwise-bold",
+                          "library": "phosphor",
+                          "weight": 500,
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZSn9w",
+                      "name": "Title",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "配音",
+                      "fontFamily": "$font",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "MElfl",
+                      "name": "Status",
+                      "fill": "$text-tertiary",
+                      "content": "已过期",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "xZk7a",
+                  "name": "Inline Alert",
+                  "width": "fill_container",
+                  "fill": "$accent-soft",
+                  "cornerRadius": 12,
+                  "gap": 10,
+                  "padding": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "lfBHx",
+                      "name": "Icon",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "triangle-alert",
+                      "library": "lucide",
+                      "fill": "$accent"
+                    },
+                    {
+                      "type": "text",
+                      "id": "EPdGb",
+                      "name": "Message",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "文字已修改，下方结果对应修改前的文字，仍可试听和导出",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ickNi",
+                  "name": "Result",
+                  "opacity": 0.6,
+                  "width": "fill_container",
+                  "fill": "$bg",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "gap": 14,
+                  "padding": 14,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "IDvlR",
+                      "name": "Result Head",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "QKDwI",
+                          "name": "Avatar",
+                          "width": 24,
+                          "height": 24,
+                          "fill": {
+                            "type": "image",
+                            "enabled": true,
+                            "url": "voice3.png",
+                            "mode": "cover"
+                          },
+                          "cornerRadius": 999
+                        },
+                        {
+                          "type": "text",
+                          "id": "wBZNL",
+                          "name": "Voice",
+                          "fill": "$text-primary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Sarah",
+                          "fontFamily": "$font",
+                          "fontSize": 14,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "SNmjs",
+                          "name": "Time",
+                          "fill": "$text-tertiary",
+                          "content": "14:05",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "oup3R",
+                      "name": "Snapshot",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "大家好，今天想和你们分享一个关于声音的小故事。每一个声音都有自己的温度。",
+                      "lineHeight": 1.45,
+                      "fontFamily": "$font",
+                      "fontSize": 13
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NZeb9",
+                      "name": "Audio Player",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "V60vQ",
+                          "name": "Label",
+                          "fill": "$text-secondary",
+                          "textGrowth": "fixed-width",
+                          "width": 44,
+                          "content": "原音",
+                          "fontFamily": "$font",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "id": "IxHN0",
+                          "type": "ref",
+                          "ref": "E9ErEn",
+                          "name": "Play",
+                          "descendants": {
+                            "azTBd": {
+                              "icon": "play-fill"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SzGD5",
+                          "name": "Waveform",
+                          "clip": true,
+                          "width": "fill_container",
+                          "height": 28,
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "Lkjrk",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 8
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "y9Kvxz",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 13
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "S8guzK",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "rklAo",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 12
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "uJyKu",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 25
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "JQFq2",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 16
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "IMMj8",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 10
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "G8whEh",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 21
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "sEb0I",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 28
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "ZbA9p",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 15
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "QdrJ8",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 8
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "dzk5o",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 18
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "cFULe",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 23
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "Cc0jO",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 13
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "l0wUN",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 7
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "YlvXW",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 16
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "NGqi6",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 25
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "H87OCA",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "nKoqb",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 12
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "f46wS",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 21
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "a2ufP",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 15
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "F8jjhJ",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 10
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "fmxDC",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 18
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "ipVOf",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 26
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "Bcipu",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 16
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "sduf1",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 12
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "FKckB",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 8
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "HBXPL",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 20
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "MOLew",
+                          "name": "Time",
+                          "fill": "$text-tertiary",
+                          "content": "00:12",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nRBVE",
+                      "name": "Audio Player",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "OcGSf",
+                          "name": "Label",
+                          "fill": "$text-secondary",
+                          "textGrowth": "fixed-width",
+                          "width": 44,
+                          "content": "新配音",
+                          "fontFamily": "$font",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "id": "hA9mY",
+                          "type": "ref",
+                          "ref": "E9ErEn",
+                          "name": "Play",
+                          "descendants": {
+                            "azTBd": {
+                              "icon": "pause-fill"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "J9gRH",
+                          "name": "Waveform",
+                          "clip": true,
+                          "width": "fill_container",
+                          "height": 28,
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "gxuVe",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 8
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "zSnYq",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 13
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "LkHFN",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "xAgdb",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 12
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "mkPjC",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 25
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "Ws6BB",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 16
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "zLYfd",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 10
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "Twksk",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 21
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "gSuET",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 28
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "x7OWA",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 15
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "ZQ96a",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 8
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "pMkow",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 18
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "DuoRF",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 23
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "JyWCP",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 13
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "RVMRX",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 7
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "vUDSY",
+                              "name": "Bar",
+                              "fill": "$wave-active",
+                              "width": 3,
+                              "height": 16
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "R8BfQy",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 25
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "XBFBr",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "A2jlTf",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 12
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "LhaAa",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 21
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "X1jHI0",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 15
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "j7J84",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 10
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "K4BaCw",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 18
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "meIsO",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 26
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "L7TSz",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 16
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "Fh4Ec",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 12
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "JOOAx",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 8
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "kEOM4",
+                              "name": "Bar",
+                              "fill": "$wave-idle",
+                              "width": 3,
+                              "height": 20
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "awDAK",
+                          "name": "Time",
+                          "fill": "$text-tertiary",
+                          "content": "00:05 / 00:09",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZU50W",
+                  "name": "Actions",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "id": "Fki1i",
+                      "type": "ref",
+                      "ref": "hPs1F",
+                      "name": "Share",
+                      "width": "fill_container",
+                      "descendants": {
+                        "DkAJz": {
+                          "content": "分享"
+                        }
+                      }
+                    },
+                    {
+                      "id": "sN5wf",
+                      "type": "ref",
+                      "ref": "hPs1F",
+                      "name": "Export",
+                      "width": "fill_container",
+                      "descendants": {
+                        "DkAJz": {
+                          "content": "导出"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "U06v2D",
+                  "x": 16,
+                  "y": 344,
+                  "name": "Saved",
+                  "enabled": false,
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "oDyFQ",
+                      "name": "Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "check-circle-fill",
+                      "library": "phosphor",
+                      "weight": 500,
+                      "fill": "$success"
+                    },
+                    {
+                      "type": "text",
+                      "id": "iTrDb",
+                      "name": "Label",
+                      "fill": "$success-text",
+                      "content": "已保存到历史",
+                      "fontFamily": "$font",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "id": "eEJfi",
+                  "type": "ref",
+                  "ref": "k8OXad",
+                  "name": "Regenerate",
+                  "width": "fill_container",
+                  "descendants": {
+                    "XyEjW": {
+                      "content": "用新文字重新生成"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "WlUBL",
+          "type": "ref",
+          "ref": "tz2pd",
+          "name": "Tab Bar"
         }
       ]
     }
@@ -12261,13 +13863,13 @@
       "type": "color",
       "value": [
         {
-          "value": "#A09896",
+          "value": "#716866",
           "theme": {
             "mode": "light"
           }
         },
         {
-          "value": "#7D7573",
+          "value": "#9C9391",
           "theme": {
             "mode": "dark"
           }
@@ -12363,7 +13965,7 @@
       "type": "color",
       "value": [
         {
-          "value": "#D93B3B",
+          "value": "#B42727",
           "theme": {
             "mode": "light"
           }
@@ -12544,6 +14146,40 @@
         },
         {
           "value": "#00000080",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "accent-text": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#A84F0C",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FF9C4D",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "success-text": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#1F7A43",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#4CC27A",
           "theme": {
             "mode": "dark"
           }
