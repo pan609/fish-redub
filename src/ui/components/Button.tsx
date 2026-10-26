@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, useWindowDimensions, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useTheme } from '../theme';
 import { hitSlop, radius } from '../tokens';
@@ -57,7 +57,7 @@ export function Button({
         style,
       ]}>
       {loading ? <ActivityIndicator size="small" color={fg} /> : icon ? <Icon name={icon} size={17} color={fg} /> : null}
-      <AppText variant="headline" style={{ color: fg }} numberOfLines={1}>
+      <AppText variant="headline" style={{ color: fg, flexShrink: 1 }} numberOfLines={1}>
         {label}
       </AppText>
     </Pressable>
@@ -123,9 +123,15 @@ export function IconButton({ icon, onPress, accessibilityLabel, size = 40, testI
   );
 }
 
-/** 两个等宽按钮并排 */
+/** 系统字体放大到一定程度后，并排的控件改为纵向排列（DESIGN §5.9） */
+export function useStackedLayout() {
+  return useWindowDimensions().fontScale > 1.35;
+}
+
+/** 两个等宽按钮并排；大字体下改为上下排列 */
 export function ButtonRow({ children }: { children: React.ReactNode }) {
-  return <View style={styles.row}>{children}</View>;
+  const stacked = useStackedLayout();
+  return <View style={stacked ? styles.column : styles.row}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -139,4 +145,5 @@ const styles = StyleSheet.create({
   },
   textButton: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   row: { flexDirection: 'row', gap: 12 },
+  column: { flexDirection: 'column', alignItems: 'stretch', gap: 10 },
 });

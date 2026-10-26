@@ -27,23 +27,35 @@ appId: com.pany05.redub
     when:
       platform: Android
     commands:
+      # DocumentsUI 打开时可能先停在"最近"、随后跳回上次的目录，先等内容稳定
       - extendedWaitUntil:
-          visible: "RedubTest|${FILE_ANDROID}|Recent"
+          visible: "Show roots"
           timeout: 10000
+      - extendedWaitUntil:
+          visible: ".*\\.(mp3|wav|m4a|ogg)|No items"
+          timeout: 10000
+      - waitForAnimationToEnd:
+          timeout: 3000
+      # 不在 RedubTest 时，从侧边栏进入 Downloads/RedubTest（搜索只在当前根目录内查找）
       - runFlow:
           when:
-            notVisible: "${FILE_ANDROID}"
+            notVisible:
+              id: ".*breadcrumb_text"
+              text: "RedubTest"
           commands:
-            - runFlow:
-                when:
-                  notVisible: "RedubTest"
-                commands:
-                  - tapOn:
-                      id: ".*roots.*|.*drawer.*"
-                      optional: true
-                  - tapOn:
-                      text: "Show roots"
-                      optional: true
-                  - tapOn: "Downloads"
+            - tapOn: "Show roots"
+            - waitForAnimationToEnd
+            - extendedWaitUntil:
+                visible: "Downloads"
+                timeout: 5000
+            - tapOn: "Downloads"
+            - extendedWaitUntil:
+                visible: "RedubTest"
+                timeout: 10000
             - tapOn: "RedubTest"
+      - extendedWaitUntil:
+          visible: ".*\\.(mp3|wav|m4a|ogg)"
+          timeout: 10000
+      - scrollUntilVisible:
+          element: "${FILE_ANDROID}"
       - tapOn: "${FILE_ANDROID}"

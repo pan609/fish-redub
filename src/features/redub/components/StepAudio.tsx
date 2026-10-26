@@ -9,7 +9,7 @@ import { audioCoordinator } from '@/services/audio/coordinator';
 import { appError } from '@/services/errors';
 import { AppText } from '@/ui/components/AppText';
 import { AudioPlayer } from '@/ui/components/AudioPlayer';
-import { TextButton } from '@/ui/components/Button';
+import { TextButton, useStackedLayout } from '@/ui/components/Button';
 import { Icon, type IconName } from '@/ui/components/Icon';
 import { InlineAlert } from '@/ui/components/InlineAlert';
 import { StepCard } from '@/ui/components/StepCard';
@@ -60,6 +60,7 @@ export function StepAudio() {
     ]);
 
   const ready = source.kind === 'ready';
+  const stacked = useStackedLayout();
   return (
     <StepCard
       index={1}
@@ -83,7 +84,7 @@ export function StepAudio() {
 
       {!ready && !busy ? (
         <>
-          <View style={styles.tiles}>
+          <View style={[styles.tiles, stacked && styles.tilesStacked]}>
             <Tile icon="mic" label="录音" gradient onPress={openRecorder} testID="step.audio.record" disabled={locked} />
             <Tile icon="folder" label="导入文件" onPress={importFile} testID="step.audio.import" disabled={locked} />
           </View>
@@ -147,6 +148,7 @@ function Tile(props: { icon: IconName; label: string; gradient?: boolean; onPres
 
 const styles = StyleSheet.create({
   tiles: { flexDirection: 'row', gap: 12 },
+  tilesStacked: { flexDirection: 'column' },
   tile: { flex: 1, alignItems: 'center', gap: 10, paddingVertical: 20, borderRadius: radius.input },
   tileIcon: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
   busy: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8 },

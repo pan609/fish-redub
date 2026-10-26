@@ -58,15 +58,18 @@ export function StepCard({ index, title, state, status, action, children, testID
             </AppText>
           )}
         </View>
-        <AppText variant="headline" color={state === 'locked' ? 'textTertiary' : 'textPrimary'} style={styles.title}>
+        <AppText variant="headline" color={state === 'locked' ? 'textTertiary' : 'textPrimary'} style={styles.title} numberOfLines={1}>
           {title}
         </AppText>
-        {action}
-        {status ? (
-          <AppText variant="caption" style={{ color: statusColor }} numberOfLines={1}>
-            {status}
-          </AppText>
-        ) : null}
+        {/* 标题不被压缩；空间不足时右侧状态文字截断（大字体适配） */}
+        <View style={styles.trailing}>
+          {action}
+          {status ? (
+            <AppText variant="caption" style={[styles.status, { color: statusColor }]} numberOfLines={1}>
+              {status}
+            </AppText>
+          ) : null}
+        </View>
       </View>
       {children ? <View style={styles.body}>{children}</View> : null}
     </View>
@@ -84,6 +87,8 @@ const styles = StyleSheet.create({
   },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   badge: { width: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
-  title: { flex: 1 },
+  title: { flexShrink: 0 },
+  trailing: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: 10 },
+  status: { flexShrink: 1, textAlign: 'right' },
   body: { gap: spacing.md },
 });

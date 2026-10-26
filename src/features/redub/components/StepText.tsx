@@ -162,6 +162,7 @@ function Editor(props: {
             props.onFocus?.();
           }}
           onBlur={() => setFocused(false)}
+          maxFontSizeMultiplier={1.8}
           style={[typography.body, styles.textInput, { color: colors.textPrimary }]}
           accessibilityLabel="配音文字"
           accessibilityHint="可修改错字、增删内容"

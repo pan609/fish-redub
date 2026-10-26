@@ -11,13 +11,13 @@ name: 06 录音
 - extendedWaitUntil: { visible: { id: recorder.toggle }, timeout: 10000 }
 - tapOn: { id: recorder.toggle }
 - extendedWaitUntil: { visible: "正在录音 · 再次点击结束", timeout: 10000 }
-- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:02" }, timeout: 10000 }
+- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:(0[2-9]|[1-5][0-9])" }, timeout: 10000 }
 - tapOn: { id: recorder.toggle }
 - extendedWaitUntil: { visible: { id: recorder.use }, timeout: 15000 }
 - tapOn: { id: recorder.retake }
 - assertVisible: "点击开始录音，最长 60 秒"
 - tapOn: { id: recorder.toggle }
-- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:02" }, timeout: 10000 }
+- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:(0[2-9]|[1-5][0-9])" }, timeout: 10000 }
 - tapOn: { id: recorder.toggle }
 - extendedWaitUntil: { visible: { id: recorder.use }, timeout: 15000 }
 - tapOn: { id: recorder.use }
