@@ -59,3 +59,9 @@ appId: com.pany05.redub
       - scrollUntilVisible:
           element: "${FILE_ANDROID}"
       - tapOn: "${FILE_ANDROID}"
+      # 模拟器负载高时点击可能被识别为长按而进入多选模式，此时点"Select"确认
+      - runFlow:
+          when:
+            visible: "1 selected"
+          commands:
+            - tapOn: "Select"
