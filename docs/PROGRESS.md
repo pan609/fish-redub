@@ -33,7 +33,7 @@
 | Android | SDK 已装；AVD：Pixel_4、Pixel_9、Pixel_9_Pro；JDK 17 |
 | Maestro | `~/.maestro/bin/maestro`（不在 PATH 中，需使用完整路径） |
 | Codex CLI | 0.164.0，已登录 |
-| Git 身份 | 仓库级：`pany-05 <pany.panpan05@gmail.com>`；gh 已登录 `pany-05` 账号（非当前活动账号） |
+| Git 身份 | 仓库级：`pany-05 <pany.panpan05@gmail.com>`；远程 https://github.com/pany-05/fish-redub（公开） |
 
 ## 关键事实（防遗忘）
 
