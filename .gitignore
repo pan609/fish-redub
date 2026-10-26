@@ -1,0 +1,43 @@
+# 密钥与本地配置（禁止提交）
+.env
+.env.local
+.env.*.local
+.assignment-original.md
+
+# 依赖
+node_modules/
+
+# Expo / Metro
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+*.tsbuildinfo
+
+# CNG：原生目录由 expo prebuild 生成，不入库
+/ios
+/android
+
+# 原生构建产物
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+*.apk
+*.aab
+*.ipa
+
+# 测试与产物
+coverage/
+.maestro-output/
+artifacts/
+
+# 系统 / IDE
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+npm-debug.*
+yarn-error.*
