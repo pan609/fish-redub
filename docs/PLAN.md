@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 | v0.1（阶段三：编码计划，待审查） |
+| 版本 | v0.2（合入 Codex PLAN 审查 6 条：存储改为每条记录独立元数据、任务代次失效、保存重试、分层故障注入、原生 60 秒上限） |
 | 日期 | 2026-10-26 |
 | 依据 | [PRD.md](PRD.md) v1.1、[DESIGN.md](DESIGN.md) v0.4 |
 | 决策方向 | 以项目足够健壮为目标：核心流程可靠、异常可恢复、数据不丢不错；不为形式完美增加复杂度 |
@@ -56,7 +56,7 @@ src/
 ├── services/
 │   ├── fish/                         client（超时、取消）、asr、tts、errors（错误归一化）
 │   ├── audio/                        coordinator（全局单音源）、probe（读时长）、sniff（文件头校验）
-│   ├── storage/                      paths、historyRepo（索引读写、原子写、孤儿清理）
+│   ├── storage/                      paths、historyRepo（每条记录独立 meta.json、幂等提交、启动恢复、串行队列）
 │   └── export/                       share、exportToDevice（iOS 分享面板 / Android SAF）
 ├── ui/
 │   ├── tokens.ts                     DESIGN §3 令牌（浅色 / 深色）
@@ -95,19 +95,26 @@ type TextState =
 type DubState =
   | { kind: 'idle' }
   | { kind: 'generating'; requestId: number; snapshot: DubSnapshot; previous?: DubResult }
-  | { kind: 'failed'; error: AppError; snapshot: DubSnapshot; previous?: DubResult }
+  | { kind: 'failed'; error: AppError; snapshot: DubSnapshot; previous?: DubResult }        // 请求失败 → "重试"会重新调用 TTS
+  | { kind: 'saving'; pending: PendingDub; previous?: DubResult }                          // 音频已到手，正在落盘
+  | { kind: 'saveFailed'; error: AppError; pending: PendingDub; previous?: DubResult }   // 落盘失败 → "重试保存"，不重发 TTS
   | { kind: 'success'; result: DubResult };          // result 内含生成它的 snapshot
+
+// 待保存上下文：保存失败后重试只用它，不重新请求
+type PendingDub = { recordId: string; snapshot: DubSnapshot; audioUri: string; durationMs: number; createdAt: string };
 
 type DubSnapshot = { sourceId: string; transcript: string; finalText: string; voiceId: string };
 ```
 
 - **过期不存储，实时计算**：`isExpired = result.snapshot` 与当前 `{sourceId, finalText, voiceId}` 不一致。避免状态不同步。
-- **请求守卫**：store 内维护递增 `requestId` 和当前 `AbortController`。响应回来时 `requestId` 不等于当前值就丢弃。取消 = `abort()` + 迁移到 `cancelled`（转写）或回到上一个结果（生成）。
+- **任务代次（请求守卫）**：store 为转写、生成各维护一个递增的 `requestId` 和当前 `AbortController`。**取消、超时、换源都会立即把 `requestId` 加一**，使旧任务失效；旧任务在每个 `await` 之后（收到响应、读完响应体、校验完成、文件写完）都检查 `isCurrent(requestId)`，失效即停止并清理自己写出的临时文件，不再改动界面或写入历史。
+- **取消边界**：请求阶段和"已收到音频、尚未提交元数据"之前都可以取消；一旦开始写入记录元数据（§3.5 第 4 步，毫秒级），该次保存不可取消，界面在 `saving` 期间隐藏取消按钮。
+- **两种重试分开**：`failed`（请求失败）→"重试"重新调用 TTS；`saveFailed`（落盘失败）→"重试保存"只用 `PendingDub` 再走一次持久化，`recordId` 不变，不会重发 TTS，也不会产生重复记录。生成得到的音频在收到后立即写入 `Paths.document/work/<recordId>.mp3`；如果连这一步都失败，就把字节暂存在内存里供重试。
 - **迁移规则写成纯函数**（`machine.ts`），由单元测试覆盖：换源、取消、过期、重试沿用快照、空白文本拦截等。
 
 ### 3.2 Fish API 客户端
 
-- 统一 `request()`：`AbortController` 同时承担超时（转写 30 秒、生成 60 秒）和用户取消；能区分 `timeout` 与 `cancelled`。
+- 统一 `request()`：`AbortController` 同时承担超时（转写 30 秒、生成 60 秒）和用户取消；能区分 `timeout` 与 `cancelled`。**超时计时覆盖到响应体读取完毕**（`arrayBuffer()` / `json()` 结束才清除定时器），响应体读到一半断流归为 `incomplete_audio`（TTS）或 `server`（ASR）。
 - **错误归一化** `AppError { code, message, retryable, retryAfterSec? }`，`code` ∈ `offline | timeout | auth | quota | rate_limit | bad_audio | bad_request | server | incomplete_audio | save_failed | cancelled | unknown`，文案统一来自 `copy/strings.ts`。
 - ASR：`multipart/form-data`（`audio` 文件 + `ignore_timestamps=true`），返回 `text`、`duration`、`language_code`。`text.trim()` 为空 → `empty`。
 - TTS：JSON `{ text, reference_id, format: 'mp3' }` → `arrayBuffer()` → **完整性校验**（有 Content-Length 时比对字节数；字节数 > 0；Content-Type 为 audio；MP3 文件头为 ID3 或帧同步）→ 写入工作目录 → 用播放器加载确认时长 > 0。
@@ -118,9 +125,10 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 
 - **AudioCoordinator（单例）**：注册所有播放器（原音、样例、配音、历史）。`play(key)` 先暂停其他；`stopAll()` 供录音前、页面离开、App 进入后台调用。
 - **音频会话**：录音前 `setAudioModeAsync({ allowsRecording: true })`；录音结束立即恢复 `allowsRecording: false`，保证 iOS 外放正常（PRD A2）。
-- **录音**：M4A / AAC / 单声道 / 44.1kHz / 64kbps，开启 metering 驱动波形；`useAudioRecorderState` 驱动计时。60 秒由计时守卫自动停止。
+- **录音**：M4A / AAC / 单声道 / 44.1kHz / 64kbps，开启 metering 驱动波形；`useAudioRecorderState` 驱动计时。**60 秒上限由原生 `recorder.record({ forDuration: 60 })` 保证**（JS 卡顿也不会超时长），JS 计时只负责显示和在原生停止后触发收尾；收尾时再校验时长 ≤ 60.5 秒。
 - **统一收尾 `finalize(reason)`**：停止、60 秒、后台、系统中断共用，ref 防重入 → 检查文件存在且大小 > 0 → 读取时长（5 秒超时）→ ≥1 秒进入预览，否则给出对应原因。
 - **后台**：`AppState` 变为 `background` 时调用 `finalize('background')`，返回前台后展示结果提示。
+- **确认使用后的音源**：录音或导入的文件在用户确认使用（或导入校验通过）后移入 `Paths.document/work/`，不放在缓存目录，避免被系统清理（PRD R10）。
 - **时长探测 `probeDuration(uri)`**：`createAudioPlayer` 加载，等待 `isLoaded` 且 `duration > 0`，5 秒超时，用完释放。
 
 ### 3.4 导入
@@ -129,16 +137,35 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 
 ### 3.5 存储与 History
 
+> v0.2 变更：v0.1 的"单个索引文件 + 临时文件替换"存在两个问题（Codex PLAN 审查 #1、#2）：索引读取失败后若按空索引清理，会误删全部历史音频；SDK 58 的 iOS `move(overwrite)` 是"先删目标再移动"，不是原子替换，并发保存和删除还会争用同一个索引。改为**每条记录自带元数据文件**，不再有共享索引。
+
 | 内容 | 位置 |
 |---|---|
-| 工作文件（未成功的录音、导入副本、待保存配音） | `Paths.cache/work/` |
-| 成功记录文件 | `Paths.document/records/<id>/source.<ext>`、`dub.mp3` |
-| 历史索引 | `Paths.document/history/index.json`（`{ version: 1, records: HistoryRecord[] }`） |
+| 工作文件（未确认的录音、导入副本） | `Paths.cache/work/` |
+| 已确认音源、待保存配音 | `Paths.document/work/`（App 每次启动时清空，因为会话状态不跨重启保留） |
+| 成功记录 | `Paths.document/records/<id>/`：`source.<ext>`、`dub.mp3`、`meta.json` |
 
-- **持久化协议**（PRD §6.1）：固定 ID → 写配音文件、复制原音 → 任一步失败删除 `<id>` 目录并保留内存中的音频供重试 → 全部就绪后按 ID 覆盖写索引。
-- **原子写**：先写 `index.json.tmp` 再替换，防止写到一半崩溃导致索引损坏；读取失败时备份损坏文件并从空索引开始，不阻塞 App。
-- **相对路径**：索引里只存相对 `Paths.document` 的路径。
-- **启动清理**：删除 `records/` 下没有索引记录的孤儿目录；文件缺失的记录标为"文件不可用"。
+**记录 = 一个目录；`meta.json` 存在才算一条完整记录。** 记录创建后不再修改（只读），删除就是删掉整个目录，所以存储层从不需要覆盖写。
+
+**保存协议**（PRD §6.1，`historyRepo.commit(pending)`，以 `recordId` 为幂等键）：
+
+1. 若 `records/<id>/meta.json` 已存在 → 视为已提交，直接返回（重试保存不会重复落库）。
+2. 创建 `records/<id>/`，复制原音为 `source.<ext>`、复制配音为 `dub.mp3`，逐个等待写入完成并校验大小 > 0。
+3. 写 `meta.json.tmp` 并读回校验 JSON。
+4. 把 `meta.json.tmp` 重命名为 `meta.json`。目标不存在，所以是同目录内的一次原子重命名，**到这一步才算提交成功**。
+5. 第 2–4 步任何一步失败 → 删除 `records/<id>/`（这时还没有 `meta.json`，删除不会影响任何已提交记录）→ 返回 `save_failed`，界面进入 `saveFailed`。
+
+**读取与恢复**（启动时，`historyRepo.load()`）：
+
+- 遍历 `records/*/`：`meta.json` 能解析 → 正常记录；文件缺失 → 标记"文件不可用"（H5）。
+- `meta.json` 存在但解析失败 → 列为"记录损坏"，**保留目录，不删除**，详情页仍可尝试播放其中的音频文件。
+- 没有 `meta.json` 但有 `meta.json.tmp` 且能解析 → 视为第 4 步之前崩溃，补做重命名恢复。
+- 两者都没有 → 未完成的保存残留。**只有在 `load()` 完整结束、确认没有任何异常之后**，才删除这类目录；`load()` 中途出错时跳过所有清理。
+- 清理在启动时、任何保存开始之前执行（App 初始化完成前生成按钮不可用），所以不会误删正在写入的目录。
+
+**串行化**：所有 `commit` / `delete` / 清理操作通过 repo 内部的一个串行队列（Promise 链）依次执行，避免同一目录的并发操作。
+
+**相对路径**：`meta.json` 里只存文件名（`source.m4a`、`dub.mp3`），运行时拼接 `Paths.document/records/<id>/`。
 
 ### 3.6 导出与分享
 
@@ -158,9 +185,17 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 - `.env.local` 提供 `EXPO_PUBLIC_FISH_API_KEY`、`EXPO_PUBLIC_FISH_API_BASE`；`config/env.ts` 启动时校验，缺失时页面直接提示"未配置 API Key"，不在请求时才失败。
 - 已知限制：`EXPO_PUBLIC_*` 会打包进客户端（README 说明）。
 
-### 3.9 测试辅助：故障注入（仅开发构建）
+### 3.9 测试辅助：分层故障注入（仅开发构建）
 
-为了在阶段四稳定复现"超时、401、402、429、5xx、音频截断、保存失败"，`services/fish/client.ts` 支持在 `__DEV__` 下注入故障（隐藏开关：长按"配音"标题打开调试面板）。生产构建不包含该入口。
+故障要走真实的校验和回滚路径才有意义（Codex PLAN 审查 #5），所以在两层注入，而不是在客户端直接伪造错误：
+
+| 层 | 注入点 | 可模拟的故障 |
+|---|---|---|
+| 网络层 | `client.ts` 依赖可替换的 `fetch`；故障版 `fetch` 包装真实响应 | 断网（抛 TypeError）、超时 / 响应体慢读、401 / 402 / 429（带 Retry-After）/ 500、TTS 响应体截断（声明的 Content-Length 大于实际字节）、非音频 Content-Type、空响应体 |
+| 存储层 | `historyRepo` 依赖可替换的文件系统适配器 | 复制原音失败、写配音失败、写 `meta.json.tmp` 失败、重命名失败 |
+
+- **单元测试**（M2）：用上述注入断言——截断会被识别为 `incomplete_audio`；任一步存储失败都不留下 `meta.json`、不删除其他记录；重试保存不重发请求、不产生重复记录；`meta.json` 损坏时不清理任何目录。
+- **手动 / Maestro**（阶段四）：开发构建中长按"配音"标题打开调试面板选择故障。生产构建不包含该入口。
 
 ## 4. 任务拆分（里程碑）
 
@@ -170,9 +205,9 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 |---|---|---|---|
 | M0 | 脚手架与原生能力验证 | SDK 58 模板、依赖安装、NativeTabs / formSheet / GlassView / SymbolView 双端验证（§5） | 9 |
 | M1 | 基础层 | 令牌、主题、Icon、Glass、Button、StepCard、InlineAlert、env 校验、声音资源随包 | — |
-| M2 | 服务层 + 单测 | Fish 客户端与错误归一化、文件头校验、historyRepo（原子写、孤儿清理）、导出 | 7、8 |
-| M3 | 主流程状态机 + 单测 | machine.ts、store.ts（请求守卫、取消、快照、过期） | 3、4、8 |
-| M4 | 音频与录音 | AudioCoordinator、AudioPlayer / Waveform、录音弹层（权限、计时、60 秒、预览、后台） | 1、5 |
+| M2 | 服务层 + 单测 | Fish 客户端（超时覆盖响应体、错误归一化）、TTS 完整性校验、文件头校验、historyRepo（每条记录独立元数据、幂等提交、恢复、串行队列）、分层故障注入及其单测、导出；**双端真实接口各跑一次 ASR / TTS** | 7、8 |
+| M3 | 主流程状态机 + 单测 | machine.ts、store.ts（任务代次失效、取消边界、快照、过期、保存失败与重试保存分离） | 3、4、8 |
+| M4 | 音频与录音 | AudioCoordinator、AudioPlayer / Waveform、录音弹层（权限、计时、原生 60 秒上限、预览、后台）、确认音源移入 document；**双端验证 60 秒自动结束与录音后外放音量** | 1、5 |
 | M5 | 导入 | 选择、复制、五项校验、取消静默 | 2 |
 | M6 | 转写与编辑 | 转写中 / 已取消 / 为空 / 失败 / 编辑 / 确认 | 3 |
 | M7 | 声音、生成、结果、导出 | 声音弹层（即选即生效、试听）、生成中 / 失败 / 成功 / 过期、分享与导出 | 4、6 |
