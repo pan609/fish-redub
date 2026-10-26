@@ -1,4 +1,8 @@
+import { initialState } from '@/features/redub/machine';
+import { useRedub } from '@/features/redub/store';
 import { appError } from '@/services/errors';
+
+// jest.mock 会被提升到 import 之前执行
 
 const mockSynthesize = jest.fn();
 const mockTranscribe = jest.fn();
@@ -19,9 +23,6 @@ jest.mock('expo-crypto', () => {
   let n = 0;
   return { randomUUID: () => `rec-${++n}` };
 });
-
-import { useRedub } from '@/features/redub/store';
-import { initialState } from '@/features/redub/machine';
 
 const audio = { id: 'src1', name: '录音', type: 'record' as const, uri: 'file:///doc/work/src1.m4a', ext: 'm4a', durationMs: 5000, sizeBytes: 1000 };
 const flush = () => new Promise((r) => setTimeout(r, 0));

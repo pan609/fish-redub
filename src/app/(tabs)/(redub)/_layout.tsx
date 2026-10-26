@@ -1,5 +1,9 @@
 import { Stack } from 'expo-router';
 
-export default function RedubLayout() {
-  return <Stack screenOptions={{ headerLargeTitle: true, headerTransparent: true }} />;
+import { stackHeaderOptions } from '@/ui/headerOptions';
+import { useTheme } from '@/ui/theme';
+
+export default function TabStackLayout() {
+  const { colors } = useTheme();
+  return <Stack screenOptions={stackHeaderOptions(colors)} />;
 }

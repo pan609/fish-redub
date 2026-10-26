@@ -1,58 +1,127 @@
-import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
-import { Stack, router } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { File, Paths } from 'expo-file-system';
-import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useNetworkState } from 'expo-network';
+import { router, Stack, useFocusEffect } from 'expo-router';
+import { useCallback, useRef } from 'react';
+import { Platform, Pressable, ScrollView, StyleSheet, View, type ScrollViewInstance } from 'react-native';
 
-import { transcribe } from '@/services/fish/asr';
-import { synthesize } from '@/services/fish/tts';
-import { probeDurationMs } from '@/services/audio/probe';
+import { env } from '@/config/env';
+import { StepAudio } from '@/features/redub/components/StepAudio';
+import { StepDub } from '@/features/redub/components/StepDub';
+import { StepText } from '@/features/redub/components/StepText';
+import { StepVoice } from '@/features/redub/components/StepVoice';
+import { visibleResult } from '@/features/redub/machine';
+import { useRedub } from '@/features/redub/store';
+import { audioCoordinator } from '@/services/audio/coordinator';
+import { ERROR_MESSAGES } from '@/copy/strings';
+import { AppText } from '@/ui/components/AppText';
+import { InlineAlert } from '@/ui/components/InlineAlert';
+import { AmbientGlow } from '@/ui/components/Misc';
+import { useTheme } from '@/ui/theme';
+import { spacing } from '@/ui/tokens';
 
-// 阶段三最小验证：NativeTabs、透明大标题、formSheet、GlassView、SymbolView
+const STEPS = ['音频', '文字', '声音', '配音'];
+
+/** 当前所在步骤：第一个未完成的步骤 */
+function useCurrentStep() {
+  return useRedub((s) => {
+    if (s.source.kind !== 'ready') return 0;
+    if (s.text.kind !== 'confirmed') return 1;
+    const result = visibleResult(s);
+    if (s.dub.kind === 'success' && result) return 4;
+    return 3;
+  });
+}
+
 export default function RedubScreen() {
-  const [log, setLog] = useState('');
-  // M2 临时自检：TTS 二进制响应 → 写文件 → 读时长 → ASR multipart 上传
-  const selfCheck = async () => {
-    try {
-      setLog('TTS 请求中…');
-      const bytes = await synthesize({ text: '你好，这是接口自检。', voiceId: 'faccba1a8ac54016bcfc02761285e67f' });
-      const f = new File(Paths.cache, 'selfcheck.mp3');
-      if (f.exists) f.delete();
-      f.create();
-      await f.write(bytes);
-      const ms = await probeDurationMs(f.uri);
-      setLog(`TTS ${bytes.length}B，时长 ${ms}ms；ASR 请求中…`);
-      const asr = await transcribe({ uri: f.uri });
-      setLog(`OK：TTS ${bytes.length}B / ${ms}ms；ASR「${asr.text}」(${asr.language})`);
-    } catch (e: any) {
-      setLog('失败：' + (e?.code ?? '') + ' ' + (e?.detail ?? e?.message ?? String(e)));
-    }
-  };
+  const { colors } = useTheme();
+  const network = useNetworkState();
+  const current = useCurrentStep();
+  const scrollRef = useRef<ScrollViewInstance>(null);
+  const textY = useRef(0);
+
+  // PRD A3：离开页面时暂停播放
+  useFocusEffect(useCallback(() => () => audioCoordinator.stopAll(), []));
+
+  const offline = network.isConnected === false || network.isInternetReachable === false;
+
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: '#FBF7F8' }}>
-      <Stack.Screen options={{ title: '配音' }} />
-      <View style={{ padding: 20, gap: 16 }}>
-        <Text>Liquid Glass 可用：{String(isLiquidGlassAvailable())}</Text>
-        <View style={{ flexDirection: 'row', gap: 12, padding: 16, backgroundColor: '#FF8C22', borderRadius: 20 }}>
-          <GlassView isInteractive style={{ width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center' }}>
-            <SymbolView name={{ ios: 'mic.fill', android: 'mic' }} size={24} tintColor="#1D1D1D" />
-          </GlassView>
-          <GlassView isInteractive tintColor="#1D1D1D" style={{ flex: 1, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: '#fff', fontWeight: '600' }}>玻璃主按钮</Text>
-          </GlassView>
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <AmbientGlow />
+      <Stack.Screen
+        options={{
+          title: '配音',
+          headerRight: () => <BrandMark />,
+        }}
+      />
+      <ScrollView
+        ref={scrollRef}
+        contentInsetAdjustmentBehavior="automatic"
+        automaticallyAdjustKeyboardInsets
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.content}
+        testID="redub.scroll">
+        {!env.isConfigured ? <InlineAlert kind="error" message={ERROR_MESSAGES.not_configured} testID="alert.not_configured" /> : null}
+        {offline ? <InlineAlert kind="warning" message="网络不可用，转写和配音需要联网" testID="alert.offline_banner" /> : null}
+
+        <Stepper current={current} />
+        <StepAudio />
+        <View onLayout={(e) => (textY.current = e.nativeEvent.layout.y)}>
+          <StepText onInputFocus={() => setTimeout(() => scrollRef.current?.scrollTo({ y: Math.max(0, textY.current - 12), animated: true }), 250)} />
         </View>
-        <Pressable testID="selfcheck" onPress={selfCheck} style={{ padding: 16, backgroundColor: '#EF8328', borderRadius: 999 }}>
-          <Text style={{ color: '#fff', textAlign: 'center' }}>接口自检</Text>
-        </Pressable>
-        <Text testID="selfcheck-log">{log}</Text>
-        <Pressable testID="open-sheet" onPress={() => router.push('/voice-picker')} style={{ padding: 16, backgroundColor: '#1D1D1D', borderRadius: 999 }}>
-          <Text style={{ color: '#fff', textAlign: 'center' }}>打开 formSheet</Text>
-        </Pressable>
-        {Array.from({ length: 30 }).map((_, i) => (
-          <View key={i} style={{ height: 60, borderRadius: 16, backgroundColor: i % 2 ? '#FFFFFF' : '#FFE3CC' }} />
-        ))}
-      </View>
-    </ScrollView>
+        <StepVoice />
+        <StepDub />
+      </ScrollView>
+    </View>
   );
 }
+
+function Stepper({ current }: { current: number }) {
+  const { colors } = useTheme();
+  return (
+    <View style={styles.stepper} accessible accessibilityLabel={`进度：第 ${Math.min(current + 1, 4)} 步，共 4 步`}>
+      <View style={styles.stepperRow}>
+        {STEPS.map((s, i) => (
+          <View
+            key={s}
+            style={[styles.seg, { backgroundColor: i < current ? colors.textPrimary : i === current ? colors.accent : colors.waveIdle }]}
+          />
+        ))}
+      </View>
+      <View style={styles.stepperRow}>
+        {STEPS.map((s, i) => (
+          <AppText
+            key={s}
+            variant="caption"
+            style={[styles.stepLabel, { color: i < current ? colors.textPrimary : i === current ? colors.accentText : colors.textTertiary }]}>
+            {s}
+          </AppText>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+/** Fish 风格的竖条品牌标志；开发构建中长按打开故障注入面板 */
+function BrandMark() {
+  const { colors } = useTheme();
+  return (
+    <Pressable
+      onLongPress={__DEV__ ? () => router.push('/debug') : undefined}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      testID="brand.mark"
+      style={styles.brand}>
+      {[8, 14, 20, 12, 22, 16, 10].map((h, i) => (
+        <View key={i} style={{ width: 3, height: h, borderRadius: 2, backgroundColor: colors.accent }} />
+      ))}
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  content: { padding: spacing.xl, paddingTop: Platform.OS === 'android' ? spacing.sm : spacing.xl, gap: 14, paddingBottom: 48 },
+  stepper: { gap: 6, marginBottom: 2 },
+  stepperRow: { flexDirection: 'row', gap: 6 },
+  seg: { flex: 1, height: 4, borderRadius: 2 },
+  stepLabel: { flex: 1 },
+  brand: { flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 6, height: 32 },
+});
