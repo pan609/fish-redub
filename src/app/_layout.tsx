@@ -46,6 +46,8 @@ export default function RootLayout() {
     presentation: 'formSheet' as const,
     sheetAllowedDetents: detents,
     sheetGrabberVisible: true,
+    // 弹层内的 ScrollView 不参与系统的"滚动到顶自动展开"，避免 iOS 调整其位置导致与标题重叠
+    sheetExpandsWhenScrolledToEdge: false,
     sheetCornerRadius: Platform.OS === 'android' ? 28 : undefined,
     contentStyle: Platform.OS === 'android' ? { backgroundColor: colors.surface } : undefined,
   });

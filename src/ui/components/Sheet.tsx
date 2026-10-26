@@ -23,9 +23,9 @@ type Props = {
 export function SheetLayout({ title, left, right, children, footer, scroll }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const Body = scroll ? ScrollView : View;
-  return (
-    <View style={[styles.root, { backgroundColor: liquidGlass ? 'transparent' : colors.surface }]}>
+
+  const header = (
+    <>
       {Platform.OS === 'android' ? (
         <View style={styles.grabberRow}>
           <View style={[styles.grabber, { backgroundColor: colors.waveIdle }]} />
@@ -38,9 +38,24 @@ export function SheetLayout({ title, left, right, children, footer, scroll }: Pr
         </AppText>
         {right}
       </View>
-      <Body style={styles.body} contentContainerStyle={scroll ? styles.scrollContent : undefined}>
-        {children}
-      </Body>
+    </>
+  );
+
+  return (
+    <View style={[styles.root, { backgroundColor: liquidGlass ? 'transparent' : colors.surface }]}>
+      {scroll ? (
+        // iOS 原生弹层会接管其中 ScrollView 的位置（贴到弹层顶部），
+        // 所以标题放进 ScrollView 内部，避免与内容重叠（M9 联调发现）
+        <ScrollView style={styles.root} contentContainerStyle={styles.scrollContent} contentInsetAdjustmentBehavior="never">
+          {header}
+          <View style={styles.scrollBody}>{children}</View>
+        </ScrollView>
+      ) : (
+        <>
+          {header}
+          <View style={styles.body}>{children}</View>
+        </>
+      )}
       {footer ? <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, spacing.lg) }]}>{footer}</View> : null}
     </View>
   );
@@ -53,6 +68,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: spacing.xl, paddingTop: spacing.xl, paddingBottom: spacing.md },
   title: { flex: 1 },
   body: { flex: 1, paddingHorizontal: spacing.xl },
-  scrollContent: { gap: spacing.sm, paddingBottom: spacing.lg },
+  scrollContent: { paddingBottom: spacing.xxl },
+  scrollBody: { paddingHorizontal: spacing.xl, gap: spacing.sm },
   footer: { paddingHorizontal: spacing.xl, paddingTop: spacing.md, gap: spacing.md },
 });
