@@ -14,7 +14,8 @@
 - 决策方向：以项目足够健壮为目标，不吹毛求疵；处理审查意见时按影响健壮性与验收的程度取舍。
 - 阶段顺序：产品设计 → UI 设计 → 编码 → 测试评测 → 优化 → 交付材料；每阶段经审查和 PM 确认后再进入下一阶段。
 - 文档、注释使用中文。
-- 密钥只放 `.env.local`，绝不写入源码或文档；提交前检查 `git diff --cached` 中没有 `sk-fish-`。
+- 密钥只放 `.env.local`，绝不写入源码或文档。仓库已配置 `core.hooksPath=.githooks`，pre-commit 会拦截密钥、令牌、本机绝对路径和 .env 文件（新克隆需执行 `git config core.hooksPath .githooks`）。
+- 仓库公开（GitHub `pany-05`）；文档里不写本机绝对路径。
 - Git 身份：`pany-05 <pany.panpan05@gmail.com>`（仓库级配置）。
 - Maestro 路径：`~/.maestro/bin/maestro`。
 - Pencil：PM 在 Pen 中打开的工作文件为 `~/.pencil/documents/b7e0384a-ab19-46ea-ae0b-f317e9741917/fishRN.pen`；项目内 `design/fishRN.pen` 是快照，改稿后需重新复制。

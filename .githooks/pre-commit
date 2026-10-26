@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# 提交前隐私检查：阻止密钥、令牌、本机绝对路径和本地环境文件进入仓库
+set -euo pipefail
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged_files" ] && exit 0
+
+fail=0
+
+# 1. 禁止提交本地环境文件
+if echo "$staged_files" | grep -E '(^|/)\.env($|\.)' | grep -vE '\.env\.example$' >/dev/null; then
+  echo "✗ 禁止提交本地环境文件（.env / .env.local 等）"
+  fail=1
+fi
+
+# 2. 扫描新增内容中的密钥与本机路径（占位符 sk-fish-xxxx 除外）
+added=$(git diff --cached -U0 --diff-filter=ACM -- . ':(exclude)package-lock.json' | grep -E '^\+' | grep -vE '^\+\+\+' || true)
+patterns='sk-fish-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|/Users/[A-Za-z0-9._-]+/'
+if echo "$added" | grep -E "$patterns" | grep -vE 'sk-fish-x+' >/dev/null; then
+  echo "✗ 检测到疑似密钥、令牌或本机绝对路径："
+  echo "$added" | grep -nE "$patterns" | grep -vE 'sk-fish-x+' | cut -c1-120
+  fail=1
+fi
+
+if [ $fail -ne 0 ]; then
+  echo "提交已阻止。请移除敏感内容后重试。"
+  exit 1
+fi
