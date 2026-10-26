@@ -19,11 +19,13 @@ export function stackHeaderOptions(colors: Colors) {
       contentStyle: { backgroundColor: colors.bg },
     };
   }
+  // Android 没有系统大标题：用左对齐的粗体大字号标题模拟，两侧按钮做成与 iOS 相同的圆形按钮
   return {
     headerShadowVisible: false,
+    headerTitleAlign: 'left' as const,
     headerStyle: { backgroundColor: colors.bg },
     headerTintColor: colors.textPrimary,
-    headerTitleStyle: { color: colors.textPrimary, fontSize: 24, fontWeight: '800' as const },
+    headerTitleStyle: { color: colors.textPrimary, fontSize: 30, fontWeight: '800' as const },
     contentStyle: { backgroundColor: colors.bg },
   };
 }

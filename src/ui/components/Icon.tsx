@@ -25,6 +25,7 @@ const ICONS = {
   offline: { ios: 'wifi.slash', android: 'wifi_off' },
   edit: { ios: 'pencil', android: 'edit' },
   regenerate: { ios: 'arrow.clockwise', android: 'refresh' },
+  restart: { ios: 'arrow.counterclockwise', android: 'restart_alt' },
 } satisfies Record<string, { ios: SFSymbol; android: AndroidSymbol }>;
 
 export type IconName = keyof typeof ICONS;

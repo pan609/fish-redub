@@ -1,22 +1,23 @@
 import { useNetworkState } from 'expo-network';
 import { router, Stack, useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useRef } from 'react';
-import { Keyboard, Platform, Pressable, ScrollView, StyleSheet, View, type ScrollViewInstance } from 'react-native';
+import { Alert, Keyboard, Platform, Pressable, ScrollView, StyleSheet, View, type ScrollViewInstance } from 'react-native';
 
 import { env } from '@/config/env';
 import { StepAudio } from '@/features/redub/components/StepAudio';
 import { StepDub } from '@/features/redub/components/StepDub';
 import { StepText } from '@/features/redub/components/StepText';
 import { StepVoice } from '@/features/redub/components/StepVoice';
-import { visibleResult } from '@/features/redub/machine';
+import { canReset, visibleResult } from '@/features/redub/machine';
 import { useRedub } from '@/features/redub/store';
 import { audioCoordinator } from '@/services/audio/coordinator';
 import { ERROR_MESSAGES } from '@/copy/strings';
 import { AppText } from '@/ui/components/AppText';
+import { Icon } from '@/ui/components/Icon';
 import { InlineAlert } from '@/ui/components/InlineAlert';
 import { AmbientGlow } from '@/ui/components/Misc';
 import { useTheme } from '@/ui/theme';
-import { spacing } from '@/ui/tokens';
+import { hitSlop, spacing } from '@/ui/tokens';
 
 const STEPS = ['音频', '文字', '声音', '配音'];
 
@@ -70,7 +71,8 @@ export default function RedubScreen() {
       <Stack.Screen
         options={{
           title: '配音',
-          headerRight: () => <BrandMark />,
+          headerLeft: () => <BrandMark />,
+          headerRight: () => <ResetButton onReset={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} />,
         }}
       />
       <AmbientGlow />
@@ -114,6 +116,51 @@ function Stepper({ current }: { current: number }) {
   );
 }
 
+/**
+ * 重新开始：任何阶段一键回到第 ① 步（PM 反馈）。有进度时才可用；保存中不可用，避免打断提交。
+ * iOS 26 导航栏按钮由系统自动套上液态玻璃，这里只放图标。
+ */
+function ResetButton({ onReset }: { onReset: () => void }) {
+  const { colors } = useTheme();
+  const enabled = useRedub(canReset);
+  const generating = useRedub((s) => s.dub.kind === 'generating');
+  const reset = useRedub((s) => s.reset);
+
+  const confirm = () => {
+    audioCoordinator.stopAll();
+    Alert.alert(
+      '重新开始？',
+      `${generating ? '正在生成的配音会被取消，' : ''}当前的音频和文字将被清空，已生成的配音仍保存在历史中。`,
+      [
+        { text: '取消', style: 'cancel' },
+        {
+          text: '重新开始',
+          style: 'destructive',
+          onPress: () => {
+            Keyboard.dismiss();
+            reset();
+            onReset();
+          },
+        },
+      ],
+    );
+  };
+
+  return (
+    <Pressable
+      testID="redub.reset"
+      onPress={confirm}
+      disabled={!enabled}
+      hitSlop={hitSlop(32)}
+      accessibilityRole="button"
+      accessibilityLabel="重新开始"
+      accessibilityState={{ disabled: !enabled }}
+      style={[styles.headerBtn, androidHeaderChip(colors), { opacity: enabled ? 1 : 0.35 }]}>
+      <Icon name="restart" size={20} color={colors.textPrimary} />
+    </Pressable>
+  );
+}
+
 /** Fish 风格的竖条品牌标志；开发构建中长按打开故障注入面板 */
 function BrandMark() {
   const { colors } = useTheme();
@@ -125,7 +172,7 @@ function BrandMark() {
       importantForAccessibility={__DEV__ ? 'auto' : 'no-hide-descendants'}
       accessibilityLabel={__DEV__ ? '调试面板' : undefined}
       testID="brand.mark"
-      style={styles.brand}>
+      style={[styles.brand, androidHeaderChip(colors)]}>
       {[8, 14, 20, 12, 22, 16, 10].map((h, i) => (
         <View key={i} style={{ width: 3, height: h, borderRadius: 2, backgroundColor: colors.accent }} />
       ))}
@@ -133,12 +180,18 @@ function BrandMark() {
   );
 }
 
+/** iOS 26 导航栏按钮自带玻璃圆底；Android 补同形态的圆形底，保持双端一致 */
+function androidHeaderChip(colors: { surfaceMuted: string }) {
+  return Platform.OS === 'android' ? { backgroundColor: colors.surfaceMuted, borderRadius: 20, height: 40, minWidth: 40, paddingHorizontal: 10 } : null;
+}
+
 const styles = StyleSheet.create({
   // iOS 26 的浮动 Tab Bar 盖在内容之上，底部留出其高度，保证最后一个按钮能滚到 Tab Bar 上方（阶段四发现）
-  content: { padding: spacing.xl, paddingTop: Platform.OS === 'android' ? spacing.sm : spacing.xl, gap: 14, paddingBottom: Platform.OS === 'ios' ? 120 : 48 },
+  content: { padding: spacing.xl, paddingTop: Platform.OS === 'android' ? spacing.sm : spacing.xl, gap: 14, paddingBottom: 120 },
   stepper: { gap: 6, marginBottom: 2 },
   stepperRow: { flexDirection: 'row', gap: 6 },
   seg: { flex: 1, height: 4, borderRadius: 2 },
   stepLabel: { flex: 1 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 6, height: 32 },
+  headerBtn: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
 });

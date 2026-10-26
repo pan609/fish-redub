@@ -1,0 +1,24 @@
+# 重新开始（PM 反馈）：进行到一半时一键回到第 ① 步，历史记录不受影响
+appId: com.pany05.redub
+name: 08 重新开始
+---
+- runFlow: common/launch.yaml
+# 初始无进度时按钮不可用
+- assertVisible: { id: redub.reset, enabled: false }
+- runFlow: common/to-confirmed.yaml
+- assertVisible: { id: redub.reset, enabled: true }
+- tapOn: { id: redub.reset }
+- extendedWaitUntil: { visible: "重新开始？", timeout: 5000 }
+- runFlow:
+    when: { platform: iOS }
+    commands:
+      - tapOn: { point: "69%,57%" }
+- runFlow:
+    when: { platform: Android }
+    commands:
+      - tapOn: { id: "android:id/button1" }
+# 回到第 ① 步
+- extendedWaitUntil: { visible: { id: step.audio.import }, timeout: 5000 }
+- assertVisible: ".*添加音频后自动转写.*"
+- assertVisible: { id: redub.reset, enabled: false }
+- takeScreenshot: 08-reset

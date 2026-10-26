@@ -28,7 +28,14 @@ export default function HistoryScreen() {
           title: '历史',
           headerRight: () =>
             records.length ? (
-              <AppText variant="callout" color="textTertiary" style={{ paddingHorizontal: 6 }}>
+              <AppText
+                variant="callout"
+                color="textTertiary"
+                style={
+                  Platform.OS === 'android'
+                    ? { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, overflow: 'hidden', backgroundColor: colors.surfaceMuted }
+                    : { paddingHorizontal: 6 }
+                }>
                 {records.length} 条记录
               </AppText>
             ) : null,
@@ -126,7 +133,7 @@ function Empty() {
 }
 
 const styles = StyleSheet.create({
-  list: { padding: spacing.xl, gap: 12, paddingBottom: Platform.OS === 'ios' ? 120 : 48 },
+  list: { padding: spacing.xl, gap: 12, paddingBottom: 120 },
   card: { borderRadius: radius.card, padding: spacing.lg, gap: 10 },
   shadow: { shadowColor: '#1D1D1D', shadowOpacity: 0.05, shadowRadius: 12, shadowOffset: { width: 0, height: 2 }, elevation: 1 },
   top: { flexDirection: 'row', alignItems: 'center', gap: 8 },

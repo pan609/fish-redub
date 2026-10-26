@@ -1,0 +1,128 @@
+# 演示视频用流程（节奏放慢，不计入测试套件）
+# 覆盖：录音 → 预览 → 使用 → 导入校验 → 中文导入 → 编辑 → 声音试听与切换 → 生成 → 试听互斥
+#       → 分享 / 导出 → 异常与重试 → 历史详情
+appId: com.pany05.redub
+name: 演示：完整流程
+---
+- launchApp:
+    clearState: true
+    permissions:
+      microphone: allow
+- extendedWaitUntil: { visible: { id: step.audio.import }, timeout: 20000 }
+- runFlow: { file: pause.yaml, env: { MS: 2500 } }
+
+# ① 录音（录音期间由宿主机朗读一句中文）
+- tapOn: { id: step.audio.record }
+- runFlow:
+    when: { visible: { id: recorder.permission } }
+    commands:
+      - tapOn: { id: recorder.permission }
+- extendedWaitUntil: { visible: { id: recorder.toggle }, timeout: 10000 }
+- runFlow: { file: pause.yaml, env: { MS: 1500 } }
+- tapOn: { id: recorder.toggle }
+- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:0[7-9]|00:[1-5][0-9]" }, timeout: 20000 }
+- tapOn: { id: recorder.toggle }
+- extendedWaitUntil: { visible: { id: recorder.use }, timeout: 15000 }
+- tapOn: { id: recorder.play }
+- runFlow: { file: pause.yaml, env: { MS: 3500 } }
+- tapOn: { id: recorder.play }
+- tapOn: { id: recorder.use }
+- extendedWaitUntil: { visible: { id: "step.text.input|alert.empty" }, timeout: 30000 }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }
+
+# ② 导入校验：超过 60 秒的文件被拦截，原音源保持不变
+- tapOn: { id: step.audio.change }
+- runFlow:
+    when: { platform: iOS }
+    commands:
+      - tapOn: "导入文件"
+- runFlow:
+    when: { platform: Android }
+    commands:
+      - tapOn: "导入文件"
+- runFlow:
+    file: ../common/import-file-picker.yaml
+    env: { FILE_IOS: too-long, FILE_ANDROID: too-long.mp3 }
+- extendedWaitUntil: { visible: "音频时长需在 1–60 秒之间.*", timeout: 10000 }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }
+
+# ③ 导入中文语音 → 转写 → 编辑 → 确认
+- tapOn: { id: alert.source.action }
+- runFlow:
+    file: ../common/import-file-picker.yaml
+    env: { FILE_IOS: zh-short, FILE_ANDROID: zh-short.mp3 }
+- extendedWaitUntil: { visible: { id: step.text.input }, timeout: 30000 }
+- runFlow: { file: pause.yaml, env: { MS: 2500 } }
+- tapOn: { id: step.text.input }
+- inputText: "谢谢收听"
+- pressKey: Enter
+- runFlow: { file: pause.yaml, env: { MS: 2000 } }
+- tapOn: { id: step.text.confirm }
+- runFlow: { file: pause.yaml, env: { MS: 1500 } }
+
+# ④ 声音：试听解说男声并选中
+- tapOn: { id: step.voice.change }
+- runFlow: { file: pause.yaml, env: { MS: 1500 } }
+- tapOn: { id: voice.preview.b4bdf5dc66004241a21ff2df165bf442 }
+- runFlow: { file: pause.yaml, env: { MS: 4000 } }
+- tapOn: { id: voice.item.b4bdf5dc66004241a21ff2df165bf442 }
+- runFlow: { file: pause.yaml, env: { MS: 1500 } }
+- tapOn: { id: voice.done }
+
+# ⑤ 生成 → 试听新配音，再播放原音（新配音自动暂停）
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: { id: result.card }, timeout: 60000 }
+- scrollUntilVisible: { element: { id: result.share }, centerElement: true }
+- runFlow: { file: pause.yaml, env: { MS: 1500 } }
+- tapOn: { id: result.play.dub }
+- runFlow: { file: pause.yaml, env: { MS: 4000 } }
+- tapOn: { id: result.play.source }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }
+- tapOn: { id: result.play.source }
+
+# ⑥ 分享（iOS 系统分享面板）/ 导出（Android 选择目录）
+- runFlow:
+    when: { platform: iOS }
+    commands:
+      - tapOn: { id: result.share }
+      - runFlow: { file: pause.yaml, env: { MS: 3000 } }
+      - swipe: { start: "50%,55%", end: "50%,98%", duration: 400 }
+- runFlow:
+    when: { platform: Android }
+    commands:
+      - tapOn: { id: result.export }
+      - extendedWaitUntil: { visible: "Music", timeout: 10000 }
+      - tapOn: "Music"
+      - tapOn: "USE THIS FOLDER"
+      - runFlow:
+          when: { visible: "ALLOW" }
+          commands:
+            - tapOn: "ALLOW"
+      - extendedWaitUntil: { visible: "已导出到所选目录", timeout: 10000 }
+- runFlow: { file: pause.yaml, env: { MS: 2000 } }
+
+# ⑦ 异常与重试：模拟服务错误 → 提示 → 恢复后重试成功
+- scrollUntilVisible: { element: { id: step.voice.change }, direction: UP, centerElement: true }
+- tapOn: { id: step.voice.change }
+- tapOn: { id: voice.item.933563129e564b19a115bedd57b7406a }
+- tapOn: { id: voice.done }
+- runFlow: { file: ../common/set-fault.yaml, env: { FAULT: debug.net.server } }
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- runFlow: { file: pause.yaml, env: { MS: 2000 } }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: "服务暂时不可用，请稍后重试", timeout: 15000 }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }
+- runFlow: { file: ../common/set-fault.yaml, env: { FAULT: debug.net.none } }
+- tapOn: { id: alert.server.action }
+- extendedWaitUntil: { visible: { id: result.card }, timeout: 60000 }
+- runFlow: { file: pause.yaml, env: { MS: 2500 } }
+
+# ⑧ 历史
+- tapOn: { text: "历史", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "history.list" }, timeout: 10000 }
+- runFlow: { file: pause.yaml, env: { MS: 2500 } }
+- tapOn: { id: history.item.1 }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }
+- tapOn: { id: history.detail.play.dub }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }

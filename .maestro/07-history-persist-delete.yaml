@@ -10,16 +10,19 @@ name: 07 历史持久化与删除
 # 重启 App（不清数据），历史仍在
 - stopApp
 - launchApp: { clearState: false }
-- tapOn: "历史"
+- tapOn: { text: "历史", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "history.list" }, timeout: 10000 }
 - extendedWaitUntil: { visible: { id: history.item.0 }, timeout: 10000 }
 - assertVisible: "1 条记录"
 # 回到配音页先生成一条新结果，再在历史删除它
-- tapOn: "配音"
+- tapOn: { text: "配音", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "redub.scroll" }, timeout: 10000 }
 - runFlow: common/to-confirmed.yaml
 - scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
 - tapOn: { id: step.dub.generate }
 - extendedWaitUntil: { visible: { id: result.card }, timeout: 60000 }
-- tapOn: "历史"
+- tapOn: { text: "历史", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "history.list" }, timeout: 10000 }
 - assertVisible: "2 条记录"
 - tapOn: { id: history.item.0 }
 - tapOn: { id: history.detail.delete }
@@ -35,6 +38,7 @@ name: 07 历史持久化与删除
       # RN Alert 在 Android 上把最后一个按钮（删除）映射为 positive 按钮
       - tapOn: { id: "android:id/button1" }
 - extendedWaitUntil: { visible: "1 条记录", timeout: 10000 }
-- tapOn: "配音"
+- tapOn: { text: "配音", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "redub.scroll" }, timeout: 10000 }
 - scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
 - assertVisible: "生成配音"

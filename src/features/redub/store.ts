@@ -34,6 +34,8 @@ type Actions = {
   retrySave: () => Promise<void>;
   /** 历史中删除记录后调用：引用该记录的当前结果失效 */
   forgetRecord: (recordId: string) => void;
+  /** 重新开始：中止进行中的请求、清理工作文件，回到第 ① 步（已保存的历史不受影响） */
+  reset: () => void;
 };
 
 export type RedubStore = M.RedubState & Actions;
@@ -259,6 +261,19 @@ export const useRedub = create<RedubStore>((set, get) => {
     },
 
     forgetRecord: (recordId) => apply(M.recordRemoved(get(), recordId)),
+
+    reset: () => {
+      const s = get();
+      if (!M.canReset(s)) return;
+      // 让所有进行中的任务失效：迟到的响应会因代次不匹配被丢弃
+      transcribeSeq++;
+      transcribeCtrl?.abort();
+      generateSeq++;
+      generateCtrl?.abort();
+      if (s.source.kind === 'ready') removeQuietly(s.source.audio.uri);
+      if (s.dub.kind === 'saveFailed') removeQuietly(s.dub.pending.audioUri);
+      apply(M.initialState);
+    },
 
     retrySave: async () => {
       const d = get().dub;

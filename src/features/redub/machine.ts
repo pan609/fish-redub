@@ -312,6 +312,12 @@ function snapshotDiffers(s: RedubState, snap: DubSnapshot): boolean {
   return !cur || cur.sourceId !== snap.sourceId || cur.finalText !== snap.finalText || cur.voiceId !== snap.voiceId;
 }
 
+/** 是否有可以"重新开始"的进度；保存中不可重置，避免打断提交 */
+export function canReset(s: RedubState): boolean {
+  if (s.dub.kind === 'saving') return false;
+  return s.source.kind !== 'empty' || s.sourceBusy || s.sourceError !== undefined;
+}
+
 /** 当前展示的结果（成功，或失败 / 生成中时保留的上一次结果） */
 export function visibleResult(s: RedubState): DubResult | undefined {
   return lastResult(s.dub);

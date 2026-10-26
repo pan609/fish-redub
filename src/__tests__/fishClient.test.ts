@@ -110,3 +110,14 @@ describe('ASR 响应解析', () => {
     expect(() => parseAsrResponse({})).toThrow();
   });
 });
+
+describe('TTS 请求体', () => {
+  it('reference_id 与确认后的文字写入请求体（阶段四审查 #3）', async () => {
+    const spy = jest.fn(okTts);
+    setFetchImpl(spy);
+    await synthesize({ text: '  确认后的文字 ', voiceId: 'voice-123' });
+    const body = JSON.parse(spy.mock.calls[0][1].body);
+    expect(body).toEqual({ text: '确认后的文字', reference_id: 'voice-123', format: 'mp3' });
+    expect(spy.mock.calls[0][0]).toMatch(/\/v1\/tts$/);
+  });
+});

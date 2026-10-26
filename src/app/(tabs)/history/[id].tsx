@@ -1,6 +1,6 @@
 import { router, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { findVoice, LANGUAGE_LABEL } from '@/config/voices';
 import { useExportActions } from '@/features/redub/components/ResultCard';
@@ -158,7 +158,7 @@ function useDelete(id: string) {
 }
 
 const styles = StyleSheet.create({
-  content: { padding: spacing.xl, gap: 16, paddingBottom: Platform.OS === 'ios' ? 120 : 48 },
+  content: { padding: spacing.xl, gap: 16, paddingBottom: 120 },
   head: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   box: { borderRadius: radius.card, padding: spacing.lg, gap: 14 },
   divider: { height: StyleSheet.hairlineWidth },

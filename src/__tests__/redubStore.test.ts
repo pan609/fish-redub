@@ -77,6 +77,18 @@ describe('主流程 store', () => {
     expect(useRedub.getState().dub.kind).toBe('success');
   });
 
+  it('换声音后：TTS 请求的 voiceId 与落库的声音都是新声音（阶段四审查 #3）', async () => {
+    await toConfirmed();
+    const adrian = 'bf322df2096a46f18c579d0baa36f41d';
+    useRedub.getState().selectVoice(adrian);
+    mockSynthesize.mockResolvedValueOnce(new Uint8Array([1, 2, 3]));
+    mockCommit.mockImplementationOnce(okCommit);
+    await useRedub.getState().generate();
+    expect(mockSynthesize).toHaveBeenCalledWith(expect.objectContaining({ voiceId: adrian, text: '你好，世界。' }));
+    expect(mockCommit.mock.calls[0][0].record.voice).toEqual({ id: adrian, name: 'Adrian' });
+    expect((useRedub.getState().dub as any).result.snapshot.voiceId).toBe(adrian);
+  });
+
   it('保存失败后重试保存：不重发 TTS，沿用同一 recordId', async () => {
     await toConfirmed();
     mockSynthesize.mockResolvedValueOnce(new Uint8Array([1, 2, 3]));
@@ -147,6 +159,20 @@ describe('主流程 store', () => {
     await useRedub.getState().generate();
     expect(mockSynthesize).toHaveBeenCalledTimes(1);
     expect(useRedub.getState().dub).toMatchObject({ kind: 'failed', error: { code: 'rate_limit' } });
+  });
+
+  it('重新开始：回到初始状态，进行中的请求迟到响应被丢弃', async () => {
+    await toConfirmed();
+    const pending = deferred<Uint8Array>();
+    mockSynthesize.mockReturnValueOnce(pending.promise);
+    const run = useRedub.getState().generate();
+    useRedub.getState().reset();
+    expect(useRedub.getState().source.kind).toBe('empty');
+    expect(useRedub.getState().text.kind).toBe('locked');
+    pending.resolve(new Uint8Array([1]));
+    await run;
+    expect(mockCommit).not.toHaveBeenCalled();
+    expect(useRedub.getState().dub.kind).toBe('idle');
   });
 
   it('生成中不能更换音源', async () => {

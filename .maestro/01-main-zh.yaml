@@ -53,7 +53,8 @@ name: 01 中文主流程
     id: result.play.dub
 - takeScreenshot: 01-result
 # 历史详情：原始转写与配音文字对照
-- tapOn: "历史"
+- tapOn: { text: "历史", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "history.list" }, timeout: 10000 }
 - tapOn:
     id: history.item.0
 - assertVisible:

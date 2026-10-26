@@ -1,0 +1,7 @@
+# 演示用停顿：等待一个不存在的元素直到超时（不判定失败）。参数：MS
+appId: com.pany05.redub
+---
+- extendedWaitUntil:
+    visible: "__演示停顿__"
+    timeout: ${MS}
+    optional: true
