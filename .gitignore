@@ -44,3 +44,11 @@ yarn-error.*
 
 # 设计参考截图（App Store 素材，版权归原作者，仅本地参考不入库）
 design/reference/
+
+# 来自 Expo 模板
+.kotlin/
+.metro-health-check*
+*.pem
+
+# 超大测试文件由 scripts/gen-test-assets.sh 生成
+test-assets/too-large.wav

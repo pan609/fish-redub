@@ -90,3 +90,17 @@
 | 7 | 低 | 原生弹层默认背景不能直接当作玻璃效果的验收依据 | 采纳：编码初期先做最小验证，结果写入 PLAN；不符合预期时有回退方案 | DESIGN §7.2 |
 
 7 条全部采纳，无分歧，不需要 PM 裁决。阶段二待 PM 确认通过。
+
+---
+
+## 阶段三：编码
+
+### 3.1 PM 指示（2026-10-26）
+
+- 阶段二通过，进入编码，先写 PLAN。
+- 决策方向：**让项目足够健壮，而不是吹毛求疵寻找问题**。处理审查意见和修改时按此取舍（已写入 CLAUDE.md，并在审查提示词中要求 Codex 只提影响健壮性的问题）。
+
+### 3.2 PLAN 审查
+
+- 审查说明：[reviews/phase3-plan-review-brief.md](reviews/phase3-plan-review-brief.md)
+- 结果保存到 `docs/reviews/phase3-plan-codex.md`（待 PM 执行）
