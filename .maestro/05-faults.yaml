@@ -1,0 +1,52 @@
+# TC-ERR-01 ~ TC-ERR-08：通过开发构建故障注入面板验证异常与重试（网络层 + 存储层）
+appId: com.pany05.redub
+name: 05 异常与重试
+---
+- runFlow: common/launch.yaml
+# 转写断网 → 重试成功
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.offline } }
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: zh-short, FILE_ANDROID: zh-short.mp3 }
+- extendedWaitUntil: { visible: { id: alert.offline }, timeout: 15000 }
+- assertVisible: "网络连接不可用，请检查网络后重试"
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.none } }
+- tapOn: { id: alert.offline.action }
+- extendedWaitUntil: { visible: { id: step.text.confirm }, timeout: 30000 }
+- tapOn: { id: step.text.confirm }
+# 配音：401 / 402 不可重试，500 / 截断 / 非音频 / 空内容可重试
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.auth } }
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: "API Key 无效或已过期，请检查配置", timeout: 15000 }
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.quota } }
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: "账户额度不足，请充值后再试", timeout: 15000 }
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.server } }
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: "服务暂时不可用，请稍后重试", timeout: 15000 }
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.truncated } }
+- tapOn: { id: alert.server.action }
+- extendedWaitUntil: { visible: "配音音频接收不完整，请重试", timeout: 30000 }
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.not_audio } }
+- tapOn: { id: alert.incomplete_audio.action }
+- extendedWaitUntil: { visible: "配音音频接收不完整，请重试", timeout: 15000 }
+# 限流：显示倒计时，等待期内重试按钮不可用
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.rate_limit } }
+- tapOn: { id: alert.incomplete_audio.action }
+- extendedWaitUntil: { visible: "请求过于频繁，请稍后重试（.* 秒后可重试）", timeout: 15000 }
+# 本地保存失败 → 重试保存（不重新请求）
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.net.none } }
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.fs.write_meta } }
+# 等待倒计时结束
+- extendedWaitUntil: { notVisible: ".*秒后可重试.*", timeout: 15000 }
+- tapOn: { id: alert.rate_limit.action }
+- extendedWaitUntil: { visible: { id: alert.save_failed }, timeout: 60000 }
+- assertVisible: "保存到本地失败，请检查存储空间后重试"
+- runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.fs.none } }
+- tapOn: { id: alert.save_failed.action }
+- extendedWaitUntil: { visible: { id: result.card }, timeout: 15000 }
+- scrollUntilVisible: { element: "已保存到历史" }
+- takeScreenshot: 05-recovered

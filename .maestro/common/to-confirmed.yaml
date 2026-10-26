@@ -1,0 +1,18 @@
+# 导入中文样本并确认转写文字（供后续用例复用）
+appId: com.pany05.redub
+---
+- runFlow:
+    file: import-file.yaml
+    env:
+      FILE_IOS: zh-short
+      FILE_ANDROID: zh-short.mp3
+- extendedWaitUntil:
+    visible:
+      id: step.text.confirm
+    timeout: 30000
+- tapOn:
+    id: step.text.confirm
+- extendedWaitUntil:
+    visible:
+      id: step.voice.name
+    timeout: 5000

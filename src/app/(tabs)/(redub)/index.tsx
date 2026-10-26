@@ -120,8 +120,10 @@ function BrandMark() {
   return (
     <Pressable
       onLongPress={__DEV__ ? () => router.push('/debug') : undefined}
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
+      // 装饰元素对读屏隐藏；开发构建中保留可访问性，供自动化测试打开故障注入面板
+      accessibilityElementsHidden={!__DEV__}
+      importantForAccessibility={__DEV__ ? 'auto' : 'no-hide-descendants'}
+      accessibilityLabel={__DEV__ ? '调试面板' : undefined}
       testID="brand.mark"
       style={styles.brand}>
       {[8, 14, 20, 12, 22, 16, 10].map((h, i) => (
@@ -132,7 +134,8 @@ function BrandMark() {
 }
 
 const styles = StyleSheet.create({
-  content: { padding: spacing.xl, paddingTop: Platform.OS === 'android' ? spacing.sm : spacing.xl, gap: 14, paddingBottom: 48 },
+  // iOS 26 的浮动 Tab Bar 盖在内容之上，底部留出其高度，保证最后一个按钮能滚到 Tab Bar 上方（阶段四发现）
+  content: { padding: spacing.xl, paddingTop: Platform.OS === 'android' ? spacing.sm : spacing.xl, gap: 14, paddingBottom: Platform.OS === 'ios' ? 120 : 48 },
   stepper: { gap: 6, marginBottom: 2 },
   stepperRow: { flexDirection: 'row', gap: 6 },
   seg: { flex: 1, height: 4, borderRadius: 2 },

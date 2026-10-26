@@ -1,6 +1,6 @@
 import { router, Stack, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { findVoice } from '@/config/voices';
 import { useHistory } from '@/features/history/store';
@@ -126,7 +126,7 @@ function Empty() {
 }
 
 const styles = StyleSheet.create({
-  list: { padding: spacing.xl, gap: 12, paddingBottom: 48 },
+  list: { padding: spacing.xl, gap: 12, paddingBottom: Platform.OS === 'ios' ? 120 : 48 },
   card: { borderRadius: radius.card, padding: spacing.lg, gap: 10 },
   shadow: { shadowColor: '#1D1D1D', shadowOpacity: 0.05, shadowRadius: 12, shadowOffset: { width: 0, height: 2 }, elevation: 1 },
   top: { flexDirection: 'row', alignItems: 'center', gap: 8 },

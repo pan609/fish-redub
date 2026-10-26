@@ -33,6 +33,7 @@ name: 01 中文主流程
 - scrollUntilVisible:
     element:
       id: step.dub.generate
+    centerElement: true
 - tapOn:
     id: step.dub.generate
 - extendedWaitUntil:

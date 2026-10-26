@@ -66,6 +66,14 @@ describe('转写', () => {
     expect(s.text).toEqual({ kind: 'transcribing', requestId: 2 });
   });
 
+  it('识别字数远超语速上限（静音幻觉）按未识别处理', () => {
+    let s = M.transcribeStarted(M.sourceAccepted(M.initialState, audio()), 1); // 时长 12 秒 → 上限 300 字
+    s = M.transcribeSucceeded(s, 1, { text: 'no, '.repeat(800) });
+    expect(s.text.kind).toBe('empty');
+    expect(M.isPlausibleTranscript('正常的一句话', 3000)).toBe(true);
+    expect(M.isPlausibleTranscript('字'.repeat(61), 1000)).toBe(false);
+  });
+
   it('取消后进入待转写，不自动重发', () => {
     const s = M.transcribeCancelled(M.transcribeStarted(M.sourceAccepted(M.initialState, audio()), 1));
     expect(s.text.kind).toBe('cancelled');

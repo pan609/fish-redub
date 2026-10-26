@@ -1,0 +1,27 @@
+# TC-REC-03 / TC-REC-06：录音 → 计时 → 停止 → 预览 → 重录 → 使用此录音 → 进入转写
+appId: com.pany05.redub
+name: 06 录音
+---
+- runFlow: common/launch.yaml
+- tapOn: { id: step.audio.record }
+- runFlow:
+    when: { visible: { id: recorder.permission } }
+    commands:
+      - tapOn: { id: recorder.permission }
+- extendedWaitUntil: { visible: { id: recorder.toggle }, timeout: 10000 }
+- tapOn: { id: recorder.toggle }
+- extendedWaitUntil: { visible: "正在录音 · 再次点击结束", timeout: 10000 }
+- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:02" }, timeout: 10000 }
+- tapOn: { id: recorder.toggle }
+- extendedWaitUntil: { visible: { id: recorder.use }, timeout: 15000 }
+- tapOn: { id: recorder.retake }
+- assertVisible: "点击开始录音，最长 60 秒"
+- tapOn: { id: recorder.toggle }
+- extendedWaitUntil: { visible: { id: recorder.timer, text: "00:02" }, timeout: 10000 }
+- tapOn: { id: recorder.toggle }
+- extendedWaitUntil: { visible: { id: recorder.use }, timeout: 15000 }
+- tapOn: { id: recorder.use }
+- extendedWaitUntil: { visible: { id: step.audio.name, text: "录音 .*" }, timeout: 10000 }
+# 环境录音可能识别为空或有文字，两者都属于正确分支
+- extendedWaitUntil: { visible: { id: "alert.empty|step.text.input" }, timeout: 30000 }
+- takeScreenshot: 06-recorded

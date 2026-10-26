@@ -1,0 +1,39 @@
+# TC-TXT-03 / TC-TXT-04：静音 → 未识别到有效语音 → 手动输入（纯空白不能确认）
+appId: com.pany05.redub
+name: 04 转写为空
+---
+- runFlow: common/launch.yaml
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: silence, FILE_ANDROID: silence.wav }
+- extendedWaitUntil:
+    visible:
+      id: alert.empty
+    timeout: 30000
+# 没有自动提交 TTS：第 ③ ④ 步仍未解锁
+- assertVisible: ".*确认文字后选择.*"
+- tapOn:
+    id: step.text.manual
+- extendedWaitUntil:
+    visible:
+      id: step.text.input
+    timeout: 5000
+- tapOn:
+    id: step.text.input
+- inputText: "   "
+- assertVisible: "请输入要配音的文字"
+- tapOn:
+    id: step.text.confirm
+- assertVisible: ".*待确认.*"
+- tapOn:
+    id: step.text.input
+- eraseText: 5
+- inputText: "这是手动输入的文字"
+- pressKey: Enter
+- tapOn:
+    id: step.text.confirm
+- assertVisible:
+    id: step.text.confirmed
+    text: "这是手动输入的文字"
+- assertVisible:
+    id: step.voice.name

@@ -1,0 +1,42 @@
+# TC-IMP-03 ~ TC-IMP-07：导入校验（空文件、超长、过短、超大、伪装扩展名、损坏）
+appId: com.pany05.redub
+name: 03 导入校验
+---
+- runFlow: common/launch.yaml
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: empty, FILE_ANDROID: empty.mp3 }
+- extendedWaitUntil: { visible: "文件为空，请选择其他音频", timeout: 10000 }
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: too-long, FILE_ANDROID: too-long.mp3 }
+- extendedWaitUntil: { visible: "音频时长需在 1–60 秒之间（当前 75.1 秒）", timeout: 10000 }
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: too-short, FILE_ANDROID: too-short.mp3 }
+- extendedWaitUntil: { visible: "音频时长需在 1–60 秒之间.*", timeout: 10000 }
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: too-large, FILE_ANDROID: too-large.wav }
+- extendedWaitUntil: { visible: "文件超过 10MB 上限.*", timeout: 10000 }
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: fake-ext, FILE_ANDROID: fake-ext.mp3 }
+- extendedWaitUntil: { visible: "仅支持 MP3、WAV、M4A 格式", timeout: 10000 }
+- runFlow:
+    file: common/import-file.yaml
+    env: { FILE_IOS: corrupt, FILE_ANDROID: corrupt.mp3 }
+- extendedWaitUntil: { visible: "仅支持 MP3、WAV、M4A 格式|无法读取该音频文件，可能已损坏", timeout: 10000 }
+# 校验失败不改变状态：仍停留在第 ① 步，可以重新选择
+- assertVisible:
+    id: step.audio.import
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      # iOS 选择器按音频类型过滤，不显示 .ogg；Android 可选中后由 App 拦截
+      - runFlow:
+          file: common/import-file.yaml
+          env: { FILE_IOS: wrong-format, FILE_ANDROID: wrong-format.ogg }
+      - extendedWaitUntil: { visible: "仅支持 MP3、WAV、M4A 格式", timeout: 10000 }
+- takeScreenshot: 03-validation

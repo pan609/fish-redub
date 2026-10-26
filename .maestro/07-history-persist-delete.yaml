@@ -1,0 +1,32 @@
+# TC-HIS-02 / TC-HIS-04：生成后重启仍在；删除后主流程同步失效
+appId: com.pany05.redub
+name: 07 历史持久化与删除
+---
+- runFlow: common/launch.yaml
+- runFlow: common/to-confirmed.yaml
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: { id: result.card }, timeout: 60000 }
+# 重启 App（不清数据），历史仍在
+- stopApp
+- launchApp: { clearState: false }
+- tapOn: "历史"
+- extendedWaitUntil: { visible: { id: history.item.0 }, timeout: 10000 }
+- assertVisible: "1 条记录"
+# 回到配音页先生成一条新结果，再在历史删除它
+- tapOn: "配音"
+- runFlow: common/to-confirmed.yaml
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- tapOn: { id: step.dub.generate }
+- extendedWaitUntil: { visible: { id: result.card }, timeout: 60000 }
+- tapOn: "历史"
+- assertVisible: "2 条记录"
+- tapOn: { id: history.item.0 }
+- tapOn: { id: history.detail.delete }
+# 系统确认框里的"删除"（页面上也有同名按钮，按弹窗位置点击）
+- extendedWaitUntil: { visible: "删除这条记录？", timeout: 5000 }
+- tapOn: { point: "69%,56%" }
+- extendedWaitUntil: { visible: "1 条记录", timeout: 10000 }
+- tapOn: "配音"
+- scrollUntilVisible: { element: { id: step.dub.generate }, centerElement: true }
+- assertVisible: "生成配音"

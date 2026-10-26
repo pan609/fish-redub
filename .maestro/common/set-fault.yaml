@@ -1,0 +1,14 @@
+# 打开开发构建的故障注入面板并选择故障。参数：FAULT（如 debug.net.offline / debug.fs.write_meta）
+appId: com.pany05.redub
+---
+- longPressOn:
+    id: brand.mark
+- extendedWaitUntil:
+    visible:
+      id: ${FAULT}
+    timeout: 5000
+- tapOn:
+    id: ${FAULT}
+- tapOn:
+    id: debug.done
+- waitForAnimationToEnd

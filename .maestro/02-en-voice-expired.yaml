@@ -1,0 +1,69 @@
+# TC-IMP-01(M4A) / TC-TXT-02 / TC-GEN-01 / TC-GEN-02 / TC-GEN-04 / TC-GEN-05
+# 英文 M4A：英文转写 → 默认英文声音 → 生成 → 试听样例并切换声音 → 结果过期 → 用新声音重新生成
+appId: com.pany05.redub
+name: 02 英文与换声音
+---
+- runFlow: common/launch.yaml
+- runFlow:
+    file: common/import-file.yaml
+    env:
+      FILE_IOS: en-m4a
+      FILE_ANDROID: en-m4a.m4a
+- extendedWaitUntil:
+    visible:
+      id: step.text.confirm
+    timeout: 30000
+- assertVisible: ".*share a short story about voices.*"
+- assertVisible: "英文"
+- tapOn:
+    id: step.text.confirm
+- assertVisible:
+    id: step.voice.name
+    text: "Sarah"
+- scrollUntilVisible:
+    element:
+      id: step.dub.generate
+    centerElement: true
+- tapOn:
+    id: step.dub.generate
+- extendedWaitUntil:
+    visible:
+      id: result.card
+    timeout: 60000
+# 打开声音弹层：试听 Adrian 样例，再选中 Adrian（选择即生效）
+- tapOn:
+    id: step.voice.change
+- tapOn:
+    id: voice.preview.bf322df2096a46f18c579d0baa36f41d
+# 行内文字合并在读屏标签中，用试听按钮的读屏名称判断播放状态
+- extendedWaitUntil:
+    visible: "暂停 Adrian"
+    timeout: 5000
+- tapOn:
+    id: voice.item.bf322df2096a46f18c579d0baa36f41d
+- tapOn:
+    id: voice.done
+- assertVisible:
+    id: step.voice.name
+    text: "Adrian"
+# 结果过期，提供"用新声音重新生成"
+- scrollUntilVisible:
+    element:
+      id: alert.expired
+- assertVisible: ".*已过期.*"
+- scrollUntilVisible:
+    element:
+      id: step.dub.generate
+    centerElement: true
+- assertVisible: "用新声音重新生成"
+- tapOn:
+    id: step.dub.generate
+- extendedWaitUntil:
+    visible:
+      id: result.card
+    timeout: 60000
+- scrollUntilVisible:
+    element: "已保存到历史"
+- assertNotVisible:
+    id: alert.expired
+- takeScreenshot: 02-regenerated

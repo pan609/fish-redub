@@ -114,13 +114,27 @@ export function transcribeStarted(s: RedubState, requestId: number): RedubState 
 const isCurrentTranscribe = (s: RedubState, requestId: number) =>
   s.text.kind === 'transcribing' && s.text.requestId === requestId;
 
+/**
+ * 转写合理性检查：识别字数远超人类语速上限时视为无效识别（阶段四发现：
+ * 对纯静音，ASR 偶尔返回数千字的重复幻觉文本）。每秒 25 个字符已高于中英文正常语速，
+ * 并给短音频留出至少 60 字的余量。
+ */
+export const MAX_CHARS_PER_SECOND = 25;
+export function isPlausibleTranscript(text: string, durationMs: number): boolean {
+  const t = text.trim();
+  if (!t) return false;
+  const limit = Math.max(60, (durationMs / 1000) * MAX_CHARS_PER_SECOND);
+  return t.length <= limit;
+}
+
 export function transcribeSucceeded(
   s: RedubState,
   requestId: number,
   result: { text: string; language?: string },
 ): RedubState {
   if (!isCurrentTranscribe(s, requestId)) return s;
-  if (!result.text.trim()) return { ...s, text: { kind: 'empty' } };
+  const durationMs = s.source.kind === 'ready' ? s.source.audio.durationMs : 0;
+  if (!isPlausibleTranscript(result.text, durationMs)) return { ...s, text: { kind: 'empty' } };
   const voiceId = s.voiceTouched ? s.voiceId : defaultVoiceFor(result.language).id;
   return {
     ...s,
