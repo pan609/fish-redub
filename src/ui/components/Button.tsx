@@ -115,7 +115,6 @@ export function IconButton({ icon, onPress, accessibilityLabel, size = 40, testI
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}>
       <Glass
-        interactive
         fallbackColor={colors.surfaceMuted}
         style={{ width: size, height: size, borderRadius: size / 2, alignItems: 'center', justifyContent: 'center' }}>
         <Icon name={icon} size={18} color={disabled ? colors.textTertiary : colors.textPrimary} />

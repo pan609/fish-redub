@@ -30,6 +30,7 @@ export const IMPORT_MESSAGES = {
 export const RECORD_MESSAGES = {
   tooShort: '录音过短，请至少录制 1 秒',
   saveFailed: '录音未能保存，请重新录制',
+  startFailed: '无法启动录音，请检查麦克风是否被其他应用占用后重试',
   autoStopped: '已达到 60 秒上限，录音已自动结束',
   backgrounded: '录音已在切到后台时结束',
   backgroundedInvalid: '切到后台时录音不足 1 秒，未能保存，请重新录制',

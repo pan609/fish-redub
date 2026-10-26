@@ -218,7 +218,7 @@ function RecordButton({ recording, busy, onPress }: { recording: boolean; busy: 
       disabled={busy}
       accessibilityRole="button"
       accessibilityLabel={recording ? '结束录音' : '开始录音'}>
-      <Glass tintColor="rgba(255,140,34,0.18)" fallbackColor="rgba(255,140,34,0.14)" interactive style={styles.ring}>
+      <Glass tintColor="rgba(255,140,34,0.18)" fallbackColor="rgba(255,140,34,0.14)" style={styles.ring}>
         <View style={[styles.recordBtn, { experimental_backgroundImage: `linear-gradient(135deg, ${accentGradient[0]}, ${accentGradient[1]})` }]}>
           {recording ? <View style={styles.stopSquare} /> : <Icon name="mic" size={28} color="#FFFFFF" />}
         </View>

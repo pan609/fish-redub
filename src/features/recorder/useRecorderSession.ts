@@ -22,6 +22,23 @@ import { recordingName } from '@/utils/format';
 
 export const MAX_RECORD_MS = 60_000;
 export const MIN_RECORD_MS = 1_000;
+const PREPARE_TIMEOUT_MS = 5_000;
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('timeout')), ms);
+    p.then(
+      (v) => {
+        clearTimeout(timer);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(timer);
+        reject(e);
+      },
+    );
+  });
+}
 
 // PRD R10：M4A / AAC / 单声道 / 44.1kHz / 64kbps，开启电平用于波形
 const RECORDING_OPTIONS: RecordingOptions = {
@@ -180,14 +197,15 @@ export function useRecorderSession() {
     if (phaseRef.current.kind === 'preview') deleteQuietly(phaseRef.current.uri);
     try {
       await enterRecordingMode();
-      await recorder.prepareToRecordAsync();
+      // 准备录音偶尔会卡住（例如系统麦克风授权未完成），设超时避免界面无响应
+      await withTimeout(recorder.prepareToRecordAsync(), PREPARE_TIMEOUT_MS);
       startedAt.current = new Date();
       wasRecording.current = false;
       recorder.record({ forDuration: MAX_RECORD_MS / 1000 }); // 原生保证 60 秒上限
       setPhase({ kind: 'recording' });
     } catch {
       await enterPlaybackMode().catch(() => undefined);
-      setPhase({ kind: 'invalid', message: RECORD_MESSAGES.saveFailed });
+      setPhase({ kind: 'invalid', message: RECORD_MESSAGES.startFailed });
     }
   };
 
