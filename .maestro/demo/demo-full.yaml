@@ -126,3 +126,21 @@ name: 演示：完整流程
 - runFlow: { file: pause.yaml, env: { MS: 3000 } }
 - tapOn: { id: history.detail.play.dub }
 - runFlow: { file: pause.yaml, env: { MS: 3000 } }
+
+# ⑨ 重新开始：一键回到第 ① 步，历史记录保留
+- tapOn: { text: "配音", retryTapIfNoChange: true }
+- extendedWaitUntil: { visible: { id: "redub.scroll" }, timeout: 10000 }
+- runFlow: { file: pause.yaml, env: { MS: 1500 } }
+- tapOn: { id: redub.reset }
+- extendedWaitUntil: { visible: "重新开始？", timeout: 5000 }
+- runFlow: { file: pause.yaml, env: { MS: 2000 } }
+- runFlow:
+    when: { platform: iOS }
+    commands:
+      - tapOn: { point: "69%,57%" }
+- runFlow:
+    when: { platform: Android }
+    commands:
+      - tapOn: { id: "android:id/button1" }
+- extendedWaitUntil: { visible: { id: step.audio.import }, timeout: 5000 }
+- runFlow: { file: pause.yaml, env: { MS: 3000 } }

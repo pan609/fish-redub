@@ -55,3 +55,6 @@ test-assets/too-large.wav
 
 # Maestro 运行产物
 artifacts/
+
+# 演示视频等交付产物（体积大，单独提交给评审）
+deliverables/
