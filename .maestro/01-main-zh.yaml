@@ -41,9 +41,8 @@ name: 01 中文主流程
       id: result.card
     timeout: 60000
 - scrollUntilVisible:
-    element:
-      id: result.share
-- assertVisible: "已保存到历史"
+    element: "已保存到历史"
+    centerElement: true
 - assertVisible: ".*谢谢收听.*"
 # 播放新配音
 - tapOn:

@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
-import { AppState, Platform } from 'react-native';
+import { AppState, LogBox, Platform } from 'react-native';
 
 import { useHistory } from '@/features/history/store';
 import { audioCoordinator, enterPlaybackMode } from '@/services/audio/coordinator';
@@ -10,6 +10,9 @@ import { ToastHost } from '@/ui/components/Toast';
 import { useTheme } from '@/ui/theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
+
+// 开发模式下屏蔽已确认无害的第三方警告提示条（避免遮挡界面与演示录屏），控制台仍会输出
+LogBox.ignoreLogs(['[RNScreens] FormSheet with ScrollView', '[Layout children]', 'Open debugger to view warnings']);
 
 export default function RootLayout() {
   const { colors } = useTheme();

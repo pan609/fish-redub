@@ -25,7 +25,7 @@ export function stackHeaderOptions(colors: Colors) {
     headerTitleAlign: 'left' as const,
     headerStyle: { backgroundColor: colors.bg },
     headerTintColor: colors.textPrimary,
-    headerTitleStyle: { color: colors.textPrimary, fontSize: 30, fontWeight: '800' as const },
+    headerTitleStyle: { color: colors.textPrimary, fontSize: 34, fontWeight: '800' as const },
     contentStyle: { backgroundColor: colors.bg },
   };
 }

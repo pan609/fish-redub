@@ -48,5 +48,5 @@ name: 05 异常与重试
 - runFlow: { file: common/set-fault.yaml, env: { FAULT: debug.fs.none } }
 - tapOn: { id: alert.save_failed.action }
 - extendedWaitUntil: { visible: { id: result.card }, timeout: 15000 }
-- scrollUntilVisible: { element: "已保存到历史" }
+- scrollUntilVisible: { element: "已保存到历史", centerElement: true }
 - takeScreenshot: 05-recovered

@@ -71,7 +71,6 @@ export default function RedubScreen() {
       <Stack.Screen
         options={{
           title: '配音',
-          headerLeft: () => <BrandMark />,
           headerRight: () => <ResetButton onReset={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} />,
         }}
       />
@@ -118,7 +117,8 @@ function Stepper({ current }: { current: number }) {
 
 /**
  * 重新开始：任何阶段一键回到第 ① 步（PM 反馈）。有进度时才可用；保存中不可用，避免打断提交。
- * iOS 26 导航栏按钮由系统自动套上液态玻璃，这里只放图标。
+ * 导航栏只保留这一个按钮（原品牌标志会被 iOS 26 套成无响应的玻璃按钮，已合并到这里）；
+ * 开发构建中长按打开故障注入面板。iOS 26 导航栏按钮由系统自动套上液态玻璃，这里只放图标。
  */
 function ResetButton({ onReset }: { onReset: () => void }) {
   const { colors } = useTheme();
@@ -127,6 +127,7 @@ function ResetButton({ onReset }: { onReset: () => void }) {
   const reset = useRedub((s) => s.reset);
 
   const confirm = () => {
+    if (!enabled) return;
     audioCoordinator.stopAll();
     Alert.alert(
       '重新开始？',
@@ -150,32 +151,13 @@ function ResetButton({ onReset }: { onReset: () => void }) {
     <Pressable
       testID="redub.reset"
       onPress={confirm}
-      disabled={!enabled}
+      onLongPress={__DEV__ ? () => router.push('/debug') : undefined}
       hitSlop={hitSlop(32)}
       accessibilityRole="button"
       accessibilityLabel="重新开始"
       accessibilityState={{ disabled: !enabled }}
-      style={[styles.headerBtn, androidHeaderChip(colors), { opacity: enabled ? 1 : 0.35 }]}>
+      style={({ pressed }) => [styles.headerBtn, androidHeaderChip(colors), { opacity: !enabled ? 0.35 : pressed ? 0.55 : 1 }]}>
       <Icon name="restart" size={20} color={colors.textPrimary} />
-    </Pressable>
-  );
-}
-
-/** Fish 风格的竖条品牌标志；开发构建中长按打开故障注入面板 */
-function BrandMark() {
-  const { colors } = useTheme();
-  return (
-    <Pressable
-      onLongPress={__DEV__ ? () => router.push('/debug') : undefined}
-      // 装饰元素对读屏隐藏；开发构建中保留可访问性，供自动化测试打开故障注入面板
-      accessibilityElementsHidden={!__DEV__}
-      importantForAccessibility={__DEV__ ? 'auto' : 'no-hide-descendants'}
-      accessibilityLabel={__DEV__ ? '调试面板' : undefined}
-      testID="brand.mark"
-      style={[styles.brand, androidHeaderChip(colors)]}>
-      {[8, 14, 20, 12, 22, 16, 10].map((h, i) => (
-        <View key={i} style={{ width: 3, height: h, borderRadius: 2, backgroundColor: colors.accent }} />
-      ))}
     </Pressable>
   );
 }
@@ -192,6 +174,5 @@ const styles = StyleSheet.create({
   stepperRow: { flexDirection: 'row', gap: 6 },
   seg: { flex: 1, height: 4, borderRadius: 2 },
   stepLabel: { flex: 1 },
-  brand: { flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 6, height: 32 },
   headerBtn: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
 });

@@ -2,7 +2,7 @@
 appId: com.pany05.redub
 ---
 - longPressOn:
-    id: brand.mark
+    id: redub.reset
 - extendedWaitUntil:
     visible:
       id: ${FAULT}
