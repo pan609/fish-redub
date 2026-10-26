@@ -2,8 +2,8 @@
 
 ## 协作方式
 
-1. **Claude Code** 完成阶段产出。
-2. **Codex** 以只读方式独立审查（`codex exec --sandbox read-only`），审查提示词与结果原文摘要记录在本文件。
+1. **Claude Code** 完成阶段产出，并在 `docs/reviews/phaseN-review-brief.md` 准备审查说明（审查范围、重点、输出格式）。
+2. **Codex** 独立审查：阶段一由 Claude 调用 `codex exec`；**自阶段二起由 PM 使用 Codex 桌面端单独执行**，结果保存到 `docs/reviews/phaseN-*-codex.md` 后交给 Claude 处理。
 3. Claude 对每条意见给出处理结论：**采纳 / 部分采纳 / 不采纳（附理由）**。
 4. 存在分歧或需要取舍的条目提交 **PM（用户）裁决**，裁决结果记录在本文件并回写到对应文档。
 
@@ -44,6 +44,9 @@
 
 决策点 D1–D6：Claude 与 Codex 的倾向一致，均为方案 A（Codex 补充：D2 按钮改名"导出"，已采纳）。
 
-### 1.3 PM 裁决
+### 1.4 PM 裁决（2026-10-26）
 
-_待裁决_
+- D1–D7 全部采用方案 A；D7 液态玻璃保持 P1。
+- UI 风格参考已上线的 Fish Audio App。
+- 后续阶段的 Codex 审查由 PM 用 Codex 桌面端单独进行，Claude 不再调用 codex。
+- PRD 定稿为 v1.0。
