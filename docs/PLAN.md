@@ -237,12 +237,12 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 | M1 基础层 | ✅ | tsc / lint |
 | M2 服务层 | ✅ | 50 条单测；双端真实接口 ASR / TTS 自检通过 |
 | M3 状态机与 store | ✅ | 27 条单测（状态机 21 + store 6） |
-| M4 音频与录音 | 🟡 | 播放器、单音源互斥、权限说明 / 拒绝 / 恢复入口已在 iOS 验证；**真实录音受本机麦克风授权限制未完成**（见下） |
+| M4 音频与录音 | ✅ | iOS：权限说明 / 拒绝 / 恢复入口、正常录音与预览、录音过短、切后台结束并可试听、60 秒自动结束（01:00 / 0.5MB）；Android：系统授权、录音、预览、录音后播放正常、静音录音进入"未识别"分支 |
 | M5 导入 | ✅ | iOS：MP3 / WAV / M4A 成功；Android：M4A 成功、损坏文件拦截 |
 | M6 转写与编辑 | ✅ | 中文、英文转写正确；编辑、恢复原文、确认 |
 | M7 声音、生成、结果、导出 | ✅ | iOS 生成、试听互斥、换声音后过期；Android 生成、SAF 导出到所选目录 |
 | M8 History | ✅ | iOS 列表、详情（原文 / 配音文字对照、双播放器） |
-| M9 双端联调 | 🟡 | 完整流程（导入路径）双端走通；录音路径待麦克风授权后补测 |
+| M9 双端联调 | ✅ | 导入与录音两条路径双端走通 |
 
 **联调中发现并修复的问题**
 
@@ -255,8 +255,10 @@ type DubSnapshot = { sourceId: string; transcript: string; finalText: string; vo
 | 5 | 声音弹层列表与标题重叠 | iOS 原生 formSheet 接管其中 ScrollView 的位置 | 可滚动弹层把标题放进 ScrollView |
 | 6 | 录音按钮点击无响应 | 可交互玻璃（`isInteractive`）在原生层拦截触摸 | 按钮内玻璃只做视觉，`pointerEvents="none"` |
 | 7 | 录音准备可能无限等待 | `prepareToRecordAsync` 在麦克风不可用时不返回 | 5 秒超时 + 可重试提示 |
+| 8 | 准备录音期间再次点击会重复启动 | 准备阶段没有状态，第二次点击又进入 start | 新增 `starting` 阶段，按钮转圈且不可点击 |
+| 9 | 重录后残留上一段的电平波形 | 波形只在开始录音时清空 | 重录时同步清空 |
 
-**环境限制**：本机运行环境下，iOS 模拟器访问 Mac 麦克风时 `prepareToRecordAsync` 不返回，Android 模拟器访问主机麦克风时进程崩溃，推断为 macOS 麦克风授权未授予宿主进程。需要在"系统设置 → 隐私与安全性 → 麦克风"中授权后补测录音路径（60 秒自动结束、过短、后台结束、录音后外放）。
+**环境问题（已解决）**：最初 iOS 模拟器 `prepareToRecordAsync` 不返回、Android 模拟器开始录音即崩溃，原因均为 macOS 未授予模拟器麦克风权限（PM 手动授权后两端录音正常，Android 崩溃非 App 缺陷）。授权前的卡死已由问题 7 的超时兜底。
 
 ## 6. 风险与对策
 

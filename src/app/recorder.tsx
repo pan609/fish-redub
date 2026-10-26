@@ -29,7 +29,7 @@ export default function RecorderSheet() {
 
   // 录音中禁止下滑关闭，避免误触（DESIGN §5.4）
   useEffect(() => {
-    navigation.setOptions({ gestureEnabled: phase.kind !== 'recording' && phase.kind !== 'finalizing' });
+    navigation.setOptions({ gestureEnabled: phase.kind !== 'recording' && phase.kind !== 'finalizing' && phase.kind !== 'starting' });
   }, [navigation, phase.kind]);
 
   // 录音电平 → 实时波形：每 100ms 采样一次最新电平
@@ -50,6 +50,12 @@ export default function RecorderSheet() {
   const startRecording = () => {
     setLevels([]);
     void session.start();
+  };
+
+  // 重录时清空上一段的波形，避免误以为仍有录音
+  const retake = () => {
+    setLevels([]);
+    session.retake();
   };
 
   // 弹层关闭（未点"使用此录音"）时丢弃录音文件
@@ -165,9 +171,19 @@ export default function RecorderSheet() {
                 );
               })}
             </View>
-            <RecordButton recording={recording} busy={phase.kind === 'finalizing'} onPress={recording ? session.stop : startRecording} />
+            <RecordButton
+              recording={recording}
+              busy={phase.kind === 'finalizing' || phase.kind === 'starting'}
+              onPress={recording ? session.stop : startRecording}
+            />
             <AppText variant="callout" color="textSecondary">
-              {recording ? '正在录音 · 再次点击结束' : phase.kind === 'finalizing' ? '正在保存录音…' : '点击开始录音，最长 60 秒'}
+              {recording
+                ? '正在录音 · 再次点击结束'
+                : phase.kind === 'finalizing'
+                  ? '正在保存录音…'
+                  : phase.kind === 'starting'
+                    ? '正在准备录音…'
+                    : '点击开始录音，最长 60 秒'}
             </AppText>
           </View>
         );
@@ -189,12 +205,12 @@ export default function RecorderSheet() {
       case 'preview':
         return (
           <ButtonRow>
-            <Button label="重录" variant="secondary" onPress={session.retake} style={{ flex: 1 }} testID="recorder.retake" />
+            <Button label="重录" variant="secondary" onPress={retake} style={{ flex: 1 }} testID="recorder.retake" />
             <Button label="使用此录音" onPress={use} style={{ flex: 1 }} testID="recorder.use" />
           </ButtonRow>
         );
       case 'invalid':
-        return <Button label="重新录音" onPress={session.retake} testID="recorder.retry" />;
+        return <Button label="重新录音" onPress={retake} testID="recorder.retry" />;
       default:
         return null;
     }

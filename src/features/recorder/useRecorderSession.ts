@@ -59,6 +59,8 @@ export type RecorderPhase =
   | { kind: 'permissionPrompt' }
   | { kind: 'denied' }
   | { kind: 'idle' }
+  /** 正在准备录音（切换音频会话、prepare），期间按钮不可点，防止重复启动 */
+  | { kind: 'starting' }
   | { kind: 'recording' }
   | { kind: 'finalizing' }
   | { kind: 'preview'; uri: string; durationMs: number; sizeBytes: number; createdAt: Date; notice?: string }
@@ -192,9 +194,11 @@ export function useRecorderSession() {
   /* ---------- 录音控制 ---------- */
 
   const start = async () => {
-    if (phaseRef.current.kind === 'recording' || phaseRef.current.kind === 'finalizing') return;
+    const cur = phaseRef.current.kind;
+    if (cur === 'starting' || cur === 'recording' || cur === 'finalizing') return;
     audioCoordinator.stopAll(); // PRD R7：开始录音前停止所有播放
     if (phaseRef.current.kind === 'preview') deleteQuietly(phaseRef.current.uri);
+    setPhase({ kind: 'starting' });
     try {
       await enterRecordingMode();
       // 准备录音偶尔会卡住（例如系统麦克风授权未完成），设超时避免界面无响应
