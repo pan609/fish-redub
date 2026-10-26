@@ -16,3 +16,4 @@
 - 密钥只放 `.env.local`，绝不写入源码或文档；提交前检查 `git diff --cached` 中没有 `sk-fish-`。
 - Git 身份：`pany-05 <pany.panpan05@gmail.com>`（仓库级配置）。
 - Maestro 路径：`~/.maestro/bin/maestro`。
+- Pencil：PM 在 Pen 中打开的工作文件为 `~/.pencil/documents/b7e0384a-ab19-46ea-ae0b-f317e9741917/fishRN.pen`；项目内 `design/fishRN.pen` 是快照，改稿后需重新复制。

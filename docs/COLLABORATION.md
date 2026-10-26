@@ -50,3 +50,20 @@
 - UI 风格参考已上线的 Fish Audio App。
 - 后续阶段的 Codex 审查由 PM 用 Codex 桌面端单独进行，Claude 不再调用 codex。
 - PRD 定稿为 v1.0。
+
+---
+
+## 阶段二：UI 设计
+
+### 2.1 产出
+
+- `docs/DESIGN.md` v0.2；Pencil 设计稿 `design/fishRN.pen`（15 个画板），导出图在 `design/exports/`。
+- 审查说明：[reviews/phase2-review-brief.md](reviews/phase2-review-brief.md)
+
+### 2.2 Codex 审查（PM 使用 Codex 桌面端执行）
+
+_待执行，结果保存到 `docs/reviews/phase2-design-codex.md`_
+
+### 2.3 处理结论
+
+_待填写_

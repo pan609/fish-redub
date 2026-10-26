@@ -7,7 +7,7 @@
 | # | 阶段 | 产出文档 | 状态 |
 |---|---|---|---|
 | 1 | 产品设计 | [PRD.md](PRD.md) | ✅ v1.0 定稿 |
-| 2 | UI 设计 | DESIGN.md、设计稿 | 🟡 进行中 |
+| 2 | UI 设计 | DESIGN.md、设计稿 | 🟡 v0.2 + 15 张设计稿完成，待 PM 用 Codex 审查 |
 | 3 | 编码 | PLAN.md、源码 | ⬜ 未开始 |
 | 4 | 测试评测 | TEST_REPORT.md | ⬜ 未开始 |
 | 5 | 优化 | OPTIMIZATION.md | ⬜ 未开始 |
@@ -48,3 +48,4 @@
 | 2026-10-26 | 阅读题目；盘点环境；实测 Fish API；选定 4 个预置声音；git init；PRD v0.1 草案 |
 | 2026-10-26 | Codex 审查 PRD（12 条，采纳 11 条、部分采纳 1 条）；PRD v0.2 |
 | 2026-10-26 | PM 裁决 D1–D7 全选 A；PRD v1.0 定稿；进入阶段二 UI 设计（参考 Fish Audio App 风格） |
+| 2026-10-26 | 调研 Fish Audio App（App Store 截图取色）；DESIGN v0.1 → v0.2；Pencil 设计稿 15 张（`design/exports/`）；审查说明 `docs/reviews/phase2-review-brief.md` |
